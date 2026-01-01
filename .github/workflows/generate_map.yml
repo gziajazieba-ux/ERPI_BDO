@@ -1,0 +1,37 @@
+name: Generate Project Map
+on:
+  push:
+    branches: [ master, main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Generate File List
+        run: |
+          # Ustawienie czasu na polski
+          export TZ="Europe/Warsaw"
+          # Format: RRRRMMDD_GGMMSS (RokMiesiącDzień_GodzinaMinutaSekunda)
+          TIMESTAMP=$(date +'%Y%m%d_%H%M%S')
+          FILENAME="mapa_projektu_${TIMESTAMP}.txt"
+          
+          # Usuwanie wszystkich poprzednich plików mapy
+          rm -f mapa_projektu_*.txt
+          
+          echo "### Mapa plików Raw (Generacja: $(date +'%Y-%m-%d %H:%M:%S')) ###" > $FILENAME
+          echo "----------------------------------------------------------" >> $FILENAME
+          
+          # Generowanie linków (wyklucza ukryte pliki i samą mapę z listy)
+          find . -type f -not -path '*/.*' -not -name "mapa_projektu_*.txt" | sed "s|^\./|https://raw.githubusercontent.com/${{ github.repository }}/master/|" >> $FILENAME
+
+      - name: Commit and Push
+        run: |
+          git config --global user.name "GitHub Action"
+          git config --global user.email "action@github.com"
+          git add .
+          # Wypycha zmiany tylko jeśli powstał nowy plik
+          git commit -m "Auto-update map: $(date +'%H:%M:%S')" || exit 0
+          git push

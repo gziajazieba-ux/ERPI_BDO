@@ -1,0 +1,897 @@
+Kpo
+
+
+GET
+​/WasteRegister​/WasteTransferCard​/v1​/Kpo​/sendercards​/receiver
+Lista kart ze statusem "Zrealizowane przejęcie" lub "Potwierdzony transport", gdzie bieżący podmiot występuje w roli przejmującego odpady
+
+Parameters
+Try it out
+Name	Description
+PageSize
+integer($int64)
+(query)
+Maksymalna liczba wyników wyszukiwania
+
+PageSize
+PaginationParameters.Order.IsAscending
+boolean
+(query)
+Flaga ustawiana na true, jeśli zbiór ma być posortowany rosnąco, false w przeciwnym razie
+
+
+--
+PaginationParameters.Order.OrderColumn
+string
+(query)
+Identyfikator kolumny, według której ma być zrelizowane sortowanie
+
+PaginationParameters.Order.OrderColumn
+PaginationParameters.Page.Index
+integer($int64)
+(query)
+Indeks strony
+
+PaginationParameters.Page.Index
+PaginationParameters.Page.Size
+integer($int64)
+(query)
+Ilość wyników na stronie (min 1, max 50)
+
+PaginationParameters.Page.Size
+PaginationParameters.GetOrderColumn
+string
+(query)
+Identyfikator kolumny, według której ma być zrelizowane sortowanie
+
+PaginationParameters.GetOrderColumn
+PaginationParameters.GetOrderDirection
+string
+(query)
+Kierunek sortowania
+
+PaginationParameters.GetOrderDirection
+PaginationParameters.GetOrdering
+string
+(query)
+Sortowanie
+
+PaginationParameters.GetOrdering
+CardNumber
+string
+(query)
+Numer lub fragment numeru karty KPO
+
+CardNumber
+SenderNip
+string
+(query)
+NIP przekazującego odpad
+
+SenderNip
+SenderIdentificationNumber
+string
+(query)
+Numer rejestrowy przekazującego odpady
+
+SenderIdentificationNumber
+SenderName
+string
+(query)
+Nazwa lub Imię i Nazwisko przekazującego odpady
+
+SenderName
+ReceiveConfirmationTime
+string($date-time)
+(query)
+Data przekazania odpadów
+
+ReceiveConfirmationTime
+CardStatusCodeNames
+string
+(query)
+Lista statusów Kart Przekazania Odpadów rozdzielona średnikami. Słownik wartości dostępny w kontrolerze CardStatus
+
+CardStatusCodeNames
+WasteCodeName
+string
+(query)
+Kod odpadów
+
+WasteCodeName
+IsUsed
+boolean
+(query)
+
+--
+Responses
+Code	Description	Links
+200	
+Success
+
+Media type
+
+application/json
+Controls Accept header.
+Example Value
+Schema
+{
+  "PageSize": 0,
+  "PageNumber": 0,
+  "TotalPagesNumber": 0,
+  "TotalResultNumber": 0,
+  "HasPreviousPage": true,
+  "HasNextPage": true,
+  "Items": [
+    {
+      "IsUsed": true,
+      "WasteCode": "string",
+      "WasteCodeDescription": "string",
+      "WasteMass": 0,
+      "KpoId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+      "CardNumber": "string",
+      "Nip": "string",
+      "IdentificationNumber": "string",
+      "NameOrFirstNameAndLastName": "string",
+      "ReceiveConfirmationTime": "2026-01-01T09:44:21.711Z",
+      "AddressHtml": "string",
+      "TerytPk": "string",
+      "BuildingNumber": "string",
+      "LocalNumber": "string",
+      "PostalCode": "string",
+      "HasNoBuildingNumber": true,
+      "ForeignCompany": true,
+      "CountryId": 0,
+      "CountryName": "string",
+      "Locality": "string",
+      "Street": "string"
+    }
+  ]
+}
+No links
+
+GET
+​/WasteRegister​/WasteTransferCard​/v1​/Kpo​/receivercards​/sender
+Lista kart ze statusem "Zrealizowane przejęcie" lub "Potwierdzony transport", gdzie bieżący podmiot występuje w roli przekazującego odpady
+
+Parameters
+Try it out
+Name	Description
+PageSize
+integer($int64)
+(query)
+Maksymalna liczba wyników wyszukiwania
+
+PageSize
+PaginationParameters.Order.IsAscending
+boolean
+(query)
+Flaga ustawiana na true, jeśli zbiór ma być posortowany rosnąco, false w przeciwnym razie
+
+
+--
+PaginationParameters.Order.OrderColumn
+string
+(query)
+Identyfikator kolumny, według której ma być zrelizowane sortowanie
+
+PaginationParameters.Order.OrderColumn
+PaginationParameters.Page.Index
+integer($int64)
+(query)
+Indeks strony
+
+PaginationParameters.Page.Index
+PaginationParameters.Page.Size
+integer($int64)
+(query)
+Ilość wyników na stronie (min 1, max 50)
+
+PaginationParameters.Page.Size
+PaginationParameters.GetOrderColumn
+string
+(query)
+Identyfikator kolumny, według której ma być zrelizowane sortowanie
+
+PaginationParameters.GetOrderColumn
+PaginationParameters.GetOrderDirection
+string
+(query)
+Kierunek sortowania
+
+PaginationParameters.GetOrderDirection
+PaginationParameters.GetOrdering
+string
+(query)
+Sortowanie
+
+PaginationParameters.GetOrdering
+ReceiverIdentificationNumber
+string
+(query)
+Numer identyfikacyjny podmiotu przejmującego odpady
+
+ReceiverIdentificationNumber
+ReceiverName
+string
+(query)
+Nazwa podmiotu przejmującego odpady
+
+ReceiverName
+ReceiverNip
+string
+(query)
+Nip podmiotu przejmującego odpady
+
+ReceiverNip
+CardNumber
+string
+(query)
+Numer Karty Przekazania Odpadów
+
+CardNumber
+ReceiveConfirmationTime
+string($date-time)
+(query)
+Data przekazania odpadów
+
+ReceiveConfirmationTime
+CardStatusCodeNames
+string
+(query)
+Lista statusów Kart Przekazania Odpadów rozdzielona średnikami. Słownik wartości dostępny w kontrolerze CardStatus
+
+CardStatusCodeNames
+WasteCodeName
+string
+(query)
+Kod odpadów
+
+WasteCodeName
+IsUsed
+boolean
+(query)
+
+--
+Responses
+Code	Description	Links
+200	
+Success
+
+Media type
+
+application/json
+Controls Accept header.
+Example Value
+Schema
+{
+  "PageSize": 0,
+  "PageNumber": 0,
+  "TotalPagesNumber": 0,
+  "TotalResultNumber": 0,
+  "HasPreviousPage": true,
+  "HasNextPage": true,
+  "Items": [
+    {
+      "IsUsed": true,
+      "WasteCode": "string",
+      "WasteCodeDescription": "string",
+      "WasteMass": 0,
+      "KpoId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+      "ReceiverIdentificationNumber": "string",
+      "ReceiverCompanyName": "string",
+      "ReceiverNip": "string",
+      "CardNumber": "string",
+      "ReceiveConfirmationTime": "2026-01-01T09:44:21.724Z",
+      "AddressHtml": "string",
+      "TerytPk": "string",
+      "BuildingNumber": "string",
+      "LocalNumber": "string",
+      "PostalCode": "string",
+      "HasNoBuildingNumber": true,
+      "ForeignCompany": true,
+      "CountryId": 0,
+      "CountryName": "string",
+      "Locality": "string",
+      "Street": "string"
+    }
+  ]
+}
+No links
+
+GET
+​/WasteRegister​/WasteTransferCard​/v1​/Kpo​/transportconfirmation​/card
+Informacje o karcie ze statusem "Potwierdzony transport"
+
+Parameters
+Try it out
+Name	Description
+KpoId
+string($uuid)
+(query)
+Id Karty Przekazania Odpadów
+
+KpoId
+CompanyType
+integer($int32)
+(query)
+Rola w której występuje podmiot w procesie przekazania odpadów
+
+Available values : 0, 1, 2
+
+
+--
+Responses
+Code	Description	Links
+200	
+Success
+
+Media type
+
+application/json
+Controls Accept header.
+Example Value
+Schema
+{
+  "CorrectedWasteMass": 0,
+  "WasteMass": 0,
+  "RevisedWasteMass": 0,
+  "IsWasteGenerating": true,
+  "WasteGeneratedTeryt": "string",
+  "WasteGeneratingAdditionalInfo": "string",
+  "WasteGeneratedTerytPk": "string",
+  "RejectedByUser": "string",
+  "CardRejectionTime": "2026-01-01T09:44:21.729Z",
+  "KpoId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+  "Year": 0,
+  "CardNumber": "string",
+  "CardStatusId": 0,
+  "CardStatus": "string",
+  "SenderCompanyId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+  "SenderEupId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+  "CarrierCompanyId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+  "ReceiverCompanyId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+  "ReceiverEupId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+  "WasteCodeId": 0,
+  "Remarks": "string",
+  "VehicleRegNumber": "string",
+  "PlannedTransportTime": "2026-01-01T09:44:21.729Z",
+  "CardApprovalTime": "2026-01-01T09:44:21.729Z",
+  "ApprovalUser": "string",
+  "RealTransportTime": "2026-01-01T09:44:21.729Z",
+  "WasteProcessId": 0,
+  "CertificateNumberAndBoxNumbers": "string",
+  "GeneratingConfirmationUser": "string",
+  "GeneratingConfirmationTime": "2026-01-01T09:44:21.729Z",
+  "ReceiveConfirmationUser": "string",
+  "ReceiveConfirmationTime": "2026-01-01T09:44:21.729Z",
+  "CardStatusCodeName": "string",
+  "TransportConfirmationUser": "string",
+  "TransportConfirmationTime": "2026-01-01T09:44:21.729Z",
+  "IsRevised": true,
+  "RevisedAt": "2026-01-01T09:44:21.729Z",
+  "RevisedBy": "string",
+  "RevisedWasteCodeId": 0,
+  "AdditionalInfo": "string",
+  "WasteCodeExtended": true,
+  "WasteCodeExtendedDescription": "string",
+  "HazardousWasteReclassification": true,
+  "HazardousWasteReclassificationDescription": "string"
+}
+No links
+
+GET
+​/WasteRegister​/WasteTransferCard​/v1​/Kpo​/planned​/card
+Informacje o karcie ze statusem "Planowana"
+
+Parameters
+Try it out
+Name	Description
+KpoId
+string($uuid)
+(query)
+Id Karty Przekazania Odpadów
+
+KpoId
+CompanyType
+integer($int32)
+(query)
+Rola w której występuje podmiot w procesie przekazania odpadów
+
+Available values : 0, 1, 2
+
+
+--
+Responses
+Code	Description	Links
+200	
+Success
+
+Media type
+
+application/json
+Controls Accept header.
+Example Value
+Schema
+{
+  "WasteMass": 0,
+  "IsWasteGenerating": true,
+  "WasteGeneratedTeryt": "string",
+  "WasteGeneratingAdditionalInfo": "string",
+  "WasteGeneratedTerytPk": "string",
+  "KpoId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+  "Year": 0,
+  "CardNumber": "string",
+  "CardStatusId": 0,
+  "CardStatus": "string",
+  "SenderCompanyId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+  "SenderEupId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+  "CarrierCompanyId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+  "ReceiverCompanyId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+  "ReceiverEupId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+  "WasteCodeId": 0,
+  "VehicleRegNumber": "string",
+  "PlannedTransportTime": "2026-01-01T09:44:21.735Z",
+  "WasteProcessId": 0,
+  "CertificateNumberAndBoxNumbers": "string",
+  "CardStatusCodeName": "string",
+  "AdditionalInfo": "string",
+  "WasteCodeExtended": true,
+  "WasteCodeExtendedDescription": "string",
+  "HazardousWasteReclassification": true,
+  "HazardousWasteReclassificationDescription": "string"
+}
+No links
+
+GET
+​/WasteRegister​/WasteTransferCard​/v1​/Kpo​/approved​/card
+Informacje o karcie ze statusem "Zatwierdzona"
+
+Parameters
+Try it out
+Name	Description
+KpoId
+string($uuid)
+(query)
+Id Karty Przekazania Odpadów
+
+KpoId
+CompanyType
+integer($int32)
+(query)
+Rola w której występuje podmiot w procesie przekazania odpadów
+
+Available values : 0, 1, 2
+
+
+--
+Responses
+Code	Description	Links
+200	
+Success
+
+Media type
+
+application/json
+Controls Accept header.
+Example Value
+Schema
+{
+  "WasteMass": 0,
+  "IsWasteGenerating": true,
+  "WasteGeneratedTeryt": "string",
+  "WasteGeneratingAdditionalInfo": "string",
+  "WasteGeneratedTerytPk": "string",
+  "KpoId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+  "Year": 0,
+  "CardNumber": "string",
+  "CardStatusId": 0,
+  "CardStatus": "string",
+  "SenderCompanyId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+  "SenderEupId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+  "CarrierCompanyId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+  "ReceiverCompanyId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+  "ReceiverEupId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+  "WasteCodeId": 0,
+  "VehicleRegNumber": "string",
+  "PlannedTransportTime": "2026-01-01T09:44:21.742Z",
+  "CardApprovalTime": "2026-01-01T09:44:21.742Z",
+  "RealTransportTime": "2026-01-01T09:44:21.742Z",
+  "ApprovalUser": "string",
+  "WasteProcessId": 0,
+  "CertificateNumberAndBoxNumbers": "string",
+  "CardStatusCodeName": "string",
+  "AdditionalInfo": "string",
+  "WasteCodeExtended": true,
+  "WasteCodeExtendedDescription": "string",
+  "HazardousWasteReclassification": true,
+  "HazardousWasteReclassificationDescription": "string"
+}
+No links
+
+GET
+​/WasteRegister​/WasteTransferCard​/v1​/Kpo​/withdrawn​/card
+Informacje o karcie ze statusem "Wycofana"
+
+Parameters
+Try it out
+Name	Description
+KpoId
+string($uuid)
+(query)
+Id Karty Przekazania Odpadów
+
+KpoId
+CompanyType
+integer($int32)
+(query)
+Rola w której występuje podmiot w procesie przekazania odpadów
+
+Available values : 0, 1, 2
+
+
+--
+Responses
+Code	Description	Links
+200	
+Success
+
+Media type
+
+application/json
+Controls Accept header.
+Example Value
+Schema
+{
+  "WasteMass": 0,
+  "IsWasteGenerating": true,
+  "WasteGeneratedTeryt": "string",
+  "WasteGeneratingAdditionalInfo": "string",
+  "WasteGeneratedTerytPk": "string",
+  "KpoId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+  "Year": 0,
+  "CardNumber": "string",
+  "CardStatusId": 0,
+  "CardStatus": "string",
+  "PreviousStatusCodeName": "string",
+  "Remarks": "string",
+  "SenderCompanyId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+  "SenderEupId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+  "CarrierCompanyId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+  "ReceiverCompanyId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+  "ReceiverEupId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+  "WasteCodeId": 0,
+  "VehicleRegNumber": "string",
+  "PlannedTransportTime": "2026-01-01T09:44:21.747Z",
+  "CardApprovalTime": "2026-01-01T09:44:21.747Z",
+  "ApprovalUser": "string",
+  "RealTransportTime": "2026-01-01T09:44:21.747Z",
+  "WasteProcessId": 0,
+  "CertificateNumberAndBoxNumbers": "string",
+  "CardWithdrawalTime": "2026-01-01T09:44:21.747Z",
+  "WithdrawnByUser": "string",
+  "GeneratingConfirmationUser": "string",
+  "GeneratingConfirmationTime": "2026-01-01T09:44:21.747Z",
+  "CardStatusCodeName": "string",
+  "WasteCodeExtended": true,
+  "WasteCodeExtendedDescription": "string",
+  "HazardousWasteReclassification": true,
+  "AdditionalInfo": "string",
+  "HazardousWasteReclassificationDescription": "string"
+}
+No links
+
+GET
+​/WasteRegister​/WasteTransferCard​/v1​/Kpo​/confirmationgenerated​/card
+Informacje o karcie ze statusem "Wygenerowane potwierdzenie"
+
+Parameters
+Try it out
+Name	Description
+KpoId
+string($uuid)
+(query)
+Id Karty Przekazania Odpadów
+
+KpoId
+CompanyType
+integer($int32)
+(query)
+Rola w której występuje podmiot w procesie przekazania odpadów
+
+Available values : 0, 1, 2
+
+
+--
+Responses
+Code	Description	Links
+200	
+Success
+
+Media type
+
+application/json
+Controls Accept header.
+Example Value
+Schema
+{
+  "WasteMass": 0,
+  "RevisedWasteMass": 0,
+  "IsWasteGenerating": true,
+  "WasteGeneratedTeryt": "string",
+  "WasteGeneratingAdditionalInfo": "string",
+  "WasteGeneratedTerytPk": "string",
+  "RejectedByUser": "string",
+  "CardRejectionTime": "2026-01-01T09:44:21.752Z",
+  "Remarks": "string",
+  "KpoId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+  "Year": 0,
+  "CardNumber": "string",
+  "CardStatusId": 0,
+  "CardStatus": "string",
+  "SenderCompanyId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+  "SenderEupId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+  "CarrierCompanyId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+  "ReceiverCompanyId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+  "ReceiverEupId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+  "WasteCodeId": 0,
+  "VehicleRegNumber": "string",
+  "PlannedTransportTime": "2026-01-01T09:44:21.752Z",
+  "CardApprovalTime": "2026-01-01T09:44:21.752Z",
+  "ApprovalUser": "string",
+  "RealTransportTime": "2026-01-01T09:44:21.752Z",
+  "WasteProcessId": 0,
+  "CertificateNumberAndBoxNumbers": "string",
+  "GeneratingConfirmationUser": "string",
+  "GeneratingConfirmationTime": "2026-01-01T09:44:21.752Z",
+  "CardStatusCodeName": "string",
+  "IsRevised": true,
+  "RevisedAt": "2026-01-01T09:44:21.752Z",
+  "RevisedBy": "string",
+  "RevisedWasteCodeId": 0,
+  "AdditionalInfo": "string",
+  "WasteCodeExtended": true,
+  "WasteCodeExtendedDescription": "string",
+  "HazardousWasteReclassification": true,
+  "HazardousWasteReclassificationDescription": "string"
+}
+No links
+
+GET
+​/WasteRegister​/WasteTransferCard​/v1​/Kpo​/receiveconfirmed​/card
+Informacje o karcie ze statusem "Potwierdzenie przejęcia"
+
+Parameters
+Try it out
+Name	Description
+KpoId
+string($uuid)
+(query)
+Id Karty Przekazania Odpadów
+
+KpoId
+CompanyType
+integer($int32)
+(query)
+Rola w której występuje podmiot w procesie przekazania odpadów
+
+Available values : 0, 1, 2
+
+
+--
+Responses
+Code	Description	Links
+200	
+Success
+
+Media type
+
+application/json
+Controls Accept header.
+Example Value
+Schema
+{
+  "CorrectedWasteMass": 0,
+  "WasteMass": 0,
+  "RevisedWasteMass": 0,
+  "IsWasteGenerating": true,
+  "WasteGeneratedTeryt": "string",
+  "WasteGeneratingAdditionalInfo": "string",
+  "WasteGeneratedTerytPk": "string",
+  "RejectedByUser": "string",
+  "CardRejectionTime": "2026-01-01T09:44:21.764Z",
+  "KpoId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+  "Year": 0,
+  "CardNumber": "string",
+  "CardStatusId": 0,
+  "CardStatus": "string",
+  "SenderCompanyId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+  "SenderEupId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+  "CarrierCompanyId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+  "ReceiverCompanyId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+  "ReceiverEupId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+  "WasteCodeId": 0,
+  "Remarks": "string",
+  "VehicleRegNumber": "string",
+  "PlannedTransportTime": "2026-01-01T09:44:21.764Z",
+  "CardApprovalTime": "2026-01-01T09:44:21.764Z",
+  "ApprovalUser": "string",
+  "RealTransportTime": "2026-01-01T09:44:21.764Z",
+  "WasteProcessId": 0,
+  "CertificateNumberAndBoxNumbers": "string",
+  "GeneratingConfirmationUser": "string",
+  "GeneratingConfirmationTime": "2026-01-01T09:44:21.764Z",
+  "ReceiveConfirmationUser": "string",
+  "ReceiveConfirmationTime": "2026-01-01T09:44:21.764Z",
+  "CardStatusCodeName": "string",
+  "IsRevised": true,
+  "RevisedAt": "2026-01-01T09:44:21.764Z",
+  "RevisedBy": "string",
+  "RevisedWasteCodeId": 0,
+  "AdditionalInfo": "string",
+  "WasteCodeExtended": true,
+  "WasteCodeExtendedDescription": "string",
+  "HazardousWasteReclassification": true,
+  "HazardousWasteReclassificationDescription": "string"
+}
+No links
+
+GET
+​/WasteRegister​/WasteTransferCard​/v1​/Kpo​/rejected​/card
+Informacje o karcie ze statusem "Odrzucona"
+
+Parameters
+Try it out
+Name	Description
+KpoId
+string($uuid)
+(query)
+Id Karty Przekazania Odpadów
+
+KpoId
+CompanyType
+integer($int32)
+(query)
+Rola w której występuje podmiot w procesie przekazania odpadów
+
+Available values : 0, 1, 2
+
+
+--
+Responses
+Code	Description	Links
+200	
+Success
+
+Media type
+
+application/json
+Controls Accept header.
+Example Value
+Schema
+{
+  "WasteMass": 0,
+  "RevisedWasteMass": 0,
+  "IsWasteGenerating": true,
+  "WasteGeneratedTeryt": "string",
+  "WasteGeneratingAdditionalInfo": "string",
+  "WasteGeneratedTerytPk": "string",
+  "KpoId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+  "Year": 0,
+  "CardNumber": "string",
+  "CardStatusId": 0,
+  "CardStatus": "string",
+  "PreviousStatusCodeName": "string",
+  "Remarks": "string",
+  "SenderCompanyId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+  "SenderEupId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+  "CarrierCompanyId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+  "ReceiverCompanyId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+  "ReceiverEupId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+  "WasteCodeId": 0,
+  "VehicleRegNumber": "string",
+  "PlannedTransportTime": "2026-01-01T09:44:21.779Z",
+  "CardApprovalTime": "2026-01-01T09:44:21.779Z",
+  "ApprovalUser": "string",
+  "RealTransportTime": "2026-01-01T09:44:21.779Z",
+  "WasteProcessId": 0,
+  "RejectedByUser": "string",
+  "CardRejectionTime": "2026-01-01T09:44:21.779Z",
+  "CertificateNumberAndBoxNumbers": "string",
+  "GeneratingConfirmationUser": "string",
+  "GeneratingConfirmationTime": "2026-01-01T09:44:21.779Z",
+  "CardStatusCodeName": "string",
+  "IsRevised": true,
+  "RevisedAt": "2026-01-01T09:44:21.779Z",
+  "RevisedBy": "string",
+  "RevisedWasteCodeId": 0,
+  "AdditionalInfo": "string",
+  "WasteCodeExtended": true,
+  "WasteCodeExtendedDescription": "string",
+  "HazardousWasteReclassification": true,
+  "HazardousWasteReclassificationDescription": "string"
+}
+No links
+
+GET
+​/WasteRegister​/WasteTransferCard​/v1​/Kpo​/printingpage
+Pobranie danych karty do wydruku
+
+Parameters
+Try it out
+Name	Description
+KpoId
+string($uuid)
+(query)
+Id Karty Przekazania Odpadów
+
+KpoId
+Responses
+Code	Description	Links
+200	
+Success
+
+Media type
+
+application/json
+Controls Accept header.
+Example Value
+Schema
+{
+  "CorrectedWasteMass": "string",
+  "PlannedTransportDate": "string",
+  "PlannedTransportTime": "string",
+  "IsWasteGenerating": true,
+  "WasteGeneratedTerytPk": "string",
+  "WasteGeneratedDistrict": "string",
+  "WasteGeneratedProvince": "string",
+  "WasteGeneratedCommune": "string",
+  "AdditionalInfo": "string",
+  "WasteGeneratingAdditionalInfo": "string",
+  "CardNumber": "string",
+  "CardStatus": "string",
+  "CalendarYear": 0,
+  "SenderNameOrFirstNameAndLastName": "string",
+  "SenderAddress": "string",
+  "SenderEupNumber": "string",
+  "SenderEupName": "string",
+  "SenderEupAddress": "string",
+  "SenderIdentificationNumber": "string",
+  "SenderNip": "string",
+  "SenderNipEu": "string",
+  "CarrierNameOrFirstNameAndLastName": "string",
+  "CarrierAddress": "string",
+  "CarrierIdentificationNumber": "string",
+  "CarrierNip": "string",
+  "CarrierNipEu": "string",
+  "ReceiverNameOrFirstNameAndLastName": "string",
+  "ReceiverAddress": "string",
+  "ReceiverEupNumber": "string",
+  "ReceiverEupName": "string",
+  "ReceiverEupAddress": "string",
+  "ReceiverIdentificationNumber": "string",
+  "ReceiverNip": "string",
+  "ReceiverNipEu": "string",
+  "WasteCodeAndDescription": "string",
+  "WasteMass": "string",
+  "CertificateNumber": "string",
+  "WasteProcess": "string",
+  "WasteProcessWithCode": "string",
+  "Remarks": "string",
+  "VehicleRegNumber": "string",
+  "RealTransportDate": "string",
+  "RealTransportTime": "string",
+  "ReceiveConfirmationDate": "string",
+  "ReceiveConfirmationTime": "string",
+  "ApprovalDate": "string",
+  "ApprovalTime": "string",
+  "ApprovedByUser": "string",
+  "TransportConfirmationDate": "string",
+  "TransportConfirmationTime": "string",
+  "TransportConfirmedByUser": "string",
+  "ReceiveConfirmedByUser": "string",
+  "WasteCodeExtended": true,
+  "WasteCodeExtendedDescription": "string",
+  "HazardousWasteReclassification": true,
+  "HazardousWasteReclassificationDescription": "string"
+}
