@@ -1,5 +1,5 @@
 ### Mapa plików Raw ###
-Ostatnia aktualizacja: 2026-01-03 11:49:11
+Ostatnia aktualizacja: 2026-01-03 11:50:21
 ----------------------------------------------------------
 https://raw.githubusercontent.com/gziajazieba-ux/ERPI_BDO/master/KPO.txt
 https://raw.githubusercontent.com/gziajazieba-ux/ERPI_BDO/master/start.txt
