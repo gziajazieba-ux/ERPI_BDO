@@ -1,0 +1,36 @@
+### Mapa plików Raw ###
+Ostatnia aktualizacja: 2026-01-03 11:25:01
+----------------------------------------------------------
+https://raw.githubusercontent.com/gziajazieba-ux/ERPI_BDO/master/ERPI_BDO.sln
+https://raw.githubusercontent.com/gziajazieba-ux/ERPI_BDO/master/mapa_projektu_20260103_112131.txt
+https://raw.githubusercontent.com/gziajazieba-ux/ERPI_BDO/master/ERPI_BDO/Properties/Resources.resx
+https://raw.githubusercontent.com/gziajazieba-ux/ERPI_BDO/master/ERPI_BDO/Properties/Resources.Designer.cs
+https://raw.githubusercontent.com/gziajazieba-ux/ERPI_BDO/master/ERPI_BDO/FormGlowne.Designer.cs
+https://raw.githubusercontent.com/gziajazieba-ux/ERPI_BDO/master/ERPI_BDO/KPO post.txt
+https://raw.githubusercontent.com/gziajazieba-ux/ERPI_BDO/master/ERPI_BDO/FormDebugText.Designer.cs
+https://raw.githubusercontent.com/gziajazieba-ux/ERPI_BDO/master/ERPI_BDO/ERPI_BDO.csproj
+https://raw.githubusercontent.com/gziajazieba-ux/ERPI_BDO/master/ERPI_BDO/FormGlowne.cs
+https://raw.githubusercontent.com/gziajazieba-ux/ERPI_BDO/master/ERPI_BDO/FormDebugText.cs
+https://raw.githubusercontent.com/gziajazieba-ux/ERPI_BDO/master/ERPI_BDO/KPO auth.txt
+https://raw.githubusercontent.com/gziajazieba-ux/ERPI_BDO/master/ERPI_BDO/FormGlowne.resx
+https://raw.githubusercontent.com/gziajazieba-ux/ERPI_BDO/master/ERPI_BDO/OpenAPIs/swagger.json
+https://raw.githubusercontent.com/gziajazieba-ux/ERPI_BDO/master/ERPI_BDO/FormDebugText.resx
+https://raw.githubusercontent.com/gziajazieba-ux/ERPI_BDO/master/ERPI_BDO/OpenApi/WasteRegister/Models/KpoReceiverListItemDto.cs
+https://raw.githubusercontent.com/gziajazieba-ux/ERPI_BDO/master/ERPI_BDO/OpenApi/WasteRegister/Models/KpoDetailsDto.cs
+https://raw.githubusercontent.com/gziajazieba-ux/ERPI_BDO/master/ERPI_BDO/KPO get.txt
+https://raw.githubusercontent.com/gziajazieba-ux/ERPI_BDO/master/ERPI_BDO/Program.cs
+https://raw.githubusercontent.com/gziajazieba-ux/ERPI_BDO/master/ERPI_BDO/Resources/error.png
+https://raw.githubusercontent.com/gziajazieba-ux/ERPI_BDO/master/ERPI_BDO/Resources/ok.png
+https://raw.githubusercontent.com/gziajazieba-ux/ERPI_BDO/master/ERPI_BDO/API/BdoPortalSession.cs
+https://raw.githubusercontent.com/gziajazieba-ux/ERPI_BDO/master/ERPI_BDO/API/BdoAuthService.cs
+https://raw.githubusercontent.com/gziajazieba-ux/ERPI_BDO/master/ERPI_BDO/API/DebugLogger.cs
+https://raw.githubusercontent.com/gziajazieba-ux/ERPI_BDO/master/ERPI_BDO/API/BdoEupService.cs
+https://raw.githubusercontent.com/gziajazieba-ux/ERPI_BDO/master/ERPI_BDO/API/KpoReceiverListResponseDto.cs
+https://raw.githubusercontent.com/gziajazieba-ux/ERPI_BDO/master/ERPI_BDO/API/BdoWasteRegisterService.cs
+https://raw.githubusercontent.com/gziajazieba-ux/ERPI_BDO/master/ERPI_BDO/API/BdoEnvironment.cs
+https://raw.githubusercontent.com/gziajazieba-ux/ERPI_BDO/master/ERPI_BDO/API/BdoTokenResponse.cs
+https://raw.githubusercontent.com/gziajazieba-ux/ERPI_BDO/master/ERPI_BDO/API/KpoReceiverFullDetailsDto.cs
+https://raw.githubusercontent.com/gziajazieba-ux/ERPI_BDO/master/ERPI_BDO/API/KpoModels.cs
+https://raw.githubusercontent.com/gziajazieba-ux/ERPI_BDO/master/ERPI_BDO/API/BdoEupContext.cs
+https://raw.githubusercontent.com/gziajazieba-ux/ERPI_BDO/master/ERPI_BDO/API/BdoApiClient.cs
+https://raw.githubusercontent.com/gziajazieba-ux/ERPI_BDO/master/mapa_projektu_20260103_111300.txt
