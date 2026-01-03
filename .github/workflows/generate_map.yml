@@ -1,37 +1,87 @@
 name: Generate Project Map
+
 on:
   push:
-    branches: [ master, main ]
+    branches:
+      - master
+      - main
+
+permissions:
+  contents: write
 
 jobs:
-  build:
+  generate-map:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
+
     steps:
-      - name: Checkout code
+      - name: Checkout repository
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: Generate File List
+      - name: Generate MAPA_PROJEKTU_AI.txt
         run: |
-          export TZ="Europe/Warsaw"
-          # Stała nazwa pliku dla porządku
-          FILENAME="mapa_projektu.txt"
-          
-          echo "### Mapa plików Raw ###" > $FILENAME
-          echo "Ostatnia aktualizacja: $(date +'%Y-%m-%d %H:%M:%S')" >> $FILENAME
-          echo "----------------------------------------------------------" >> $FILENAME
-          
-          REPO_URL="https://raw.githubusercontent.com/${{ github.repository }}/${{ github.ref_name }}"
-          find . -type f -not -path '*/.*' -not -name "$FILENAME" | sed "s|^\./|$REPO_URL/|" >> $FILENAME
+          REPO_NAME="ERPI_BDO"
+          REPO_OWNER="gziajazieba-ux"
+          BRANCH="master"
+          OUTPUT="MAPA_PROJEKTU_AI.txt"
+          MAX_LINES=30
 
-      - name: Commit and Push
+          NOW=$(date +"%Y-%m-%d %H:%M:%S")
+          HEAD_COMMIT=$(git rev-parse --short HEAD)
+
+          echo "### MAPA PROJEKTU ${REPO_NAME} ###" > $OUTPUT
+          echo "Repo: https://github.com/${REPO_OWNER}/${REPO_NAME}" >> $OUTPUT
+          echo "Gałąź: ${BRANCH}" >> $OUTPUT
+          echo "Ostatnia aktualizacja mapy: ${NOW}" >> $OUTPUT
+          echo "Commit HEAD: ${HEAD_COMMIT}" >> $OUTPUT
+          echo "" >> $OUTPUT
+          echo "--------------------------------------------------" >> $OUTPUT
+          echo "" >> $OUTPUT
+
+          find . -type f \
+            ! -path "./.git/*" \
+            ! -path "./.github/*" \
+            ! -name "$OUTPUT" \
+            | sort | while read FILE; do
+
+              REL_PATH="/${FILE#./}"
+              SIZE=$(du -k "$FILE" | cut -f1)K
+              MTIME=$(date -r "$FILE" +"%Y-%m-%d %H:%M:%S")
+              HASH=$(sha1sum "$FILE" | cut -d' ' -f1)
+              COMMIT=$(git log -n 1 --pretty=format:%h -- "$FILE" || echo "brak")
+
+              RAW_URL="https://raw.githubusercontent.com/${REPO_OWNER}/${REPO_NAME}/${BRANCH}${REL_PATH}"
+              BLOB_URL="https://github.com/${REPO_OWNER}/${REPO_NAME}/blob/${BRANCH}${REL_PATH}"
+
+              echo "[PLIK]" >> $OUTPUT
+              echo "Ścieżka repo: ${REL_PATH}" >> $OUTPUT
+              echo "Rozmiar: ${SIZE}" >> $OUTPUT
+              echo "Ostatnia modyfikacja pliku: ${MTIME}" >> $OUTPUT
+              echo "Hash (SHA1): ${HASH}" >> $OUTPUT
+              echo "Ostatni commit: ${COMMIT}" >> $OUTPUT
+              echo "Link GitHub: ${BLOB_URL}" >> $OUTPUT
+              echo "Link RAW: ${RAW_URL}" >> $OUTPUT
+              echo "" >> $OUTPUT
+
+              echo "Wyciąg (pierwsze ${MAX_LINES} linii):" >> $OUTPUT
+              echo '"""' >> $OUTPUT
+              head -n ${MAX_LINES} "$FILE" >> $OUTPUT || echo "[nie można odczytać]" >> $OUTPUT
+              echo '"""' >> $OUTPUT
+              echo "" >> $OUTPUT
+              echo "--------------------------------------------------" >> $OUTPUT
+              echo "" >> $OUTPUT
+          done
+
+      - name: Commit and push project map
         run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git add mapa_projektu.txt
-          # Skrypt teraz nadpisuje ten sam plik
-          git commit -m "Auto-update project map" || exit 0
-          git push
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+
+          if git diff --quiet; then
+            echo "Brak zmian w mapie – commit pominięty."
+          else
+            git add MAPA_PROJEKTU_AI.txt
+            git commit -m "Automatyczna aktualizacja mapy projektu"
+            git push
+          fi
