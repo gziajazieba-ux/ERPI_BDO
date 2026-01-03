@@ -3,14 +3,14 @@ using ERPI_BDO.OpenApi.WasteRegister; // Tu nadal trzymamy DTO z NSwag dla listy
 using ERPI_BDO.OpenApi.WasteRegister.Models; // <- DODANE: tu jest KpoDetailsDto
 using ERPI_BDO.Portal;
 using Microsoft.Web.WebView2.Core;
+using System; // dla DateTime itp.
+using System.Collections.Generic; // Dodaj to
+using System.Globalization; // dla parsowania daty/czasu
+using System.Linq; // Dodaj to
 using System.Net;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
-using System.Collections.Generic; // Dodaj to
-using System.Linq; // Dodaj to
-using System; // dla DateTime itp.
-using System.Globalization; // dla parsowania daty/czasu
 using System.Windows.Forms; // używane typy WinForms
 
 namespace ERPI_BDO
@@ -49,6 +49,115 @@ namespace ERPI_BDO
             System.Net.ServicePointManager.SecurityProtocol =
             System.Net.SecurityProtocolType.Tls12 | System.Net.SecurityProtocolType.Tls13;
         }
+        private static string? GetString(JsonElement el, params string[] names)
+        {
+            foreach (var n in names)
+            {
+                if (el.TryGetProperty(n, out var p) && p.ValueKind != JsonValueKind.Null)
+                {
+                    if (p.ValueKind == JsonValueKind.String)
+                        return p.GetString();
+
+                    return p.ToString();
+                }
+            }
+            return null;
+        }
+
+        private static Guid? GetGuid(JsonElement el, params string[] names)
+        {
+            foreach (var n in names)
+            {
+                if (el.TryGetProperty(n, out var p))
+                {
+                    // GUID jako string (najczęstszy przypadek)
+                    if (p.ValueKind == JsonValueKind.String &&
+                        Guid.TryParse(p.GetString(), out var g))
+                    {
+                        return g;
+                    }
+
+                    // czasem BDO zwraca guid jako obiekt (rzadkie, ale bywa)
+                    if (p.ValueKind == JsonValueKind.Object &&
+                        Guid.TryParse(p.ToString(), out g))
+                    {
+                        return g;
+                    }
+                }
+            }
+            return null;
+        }
+
+        private static int? GetInt(JsonElement el, params string[] names)
+        {
+            foreach (var n in names)
+            {
+                if (el.TryGetProperty(n, out var p))
+                {
+                    if (p.ValueKind == JsonValueKind.Number && p.TryGetInt32(out var i))
+                        return i;
+
+                    if (p.ValueKind == JsonValueKind.String &&
+                        int.TryParse(p.GetString(), out i))
+                        return i;
+                }
+            }
+            return null;
+        }
+
+        private static decimal? GetDecimal(JsonElement el, params string[] names)
+        {
+            foreach (var n in names)
+            {
+                if (el.TryGetProperty(n, out var p))
+                {
+                    if (p.ValueKind == JsonValueKind.Number &&
+                        p.TryGetDecimal(out var d))
+                        return d;
+
+                    if (p.ValueKind == JsonValueKind.String &&
+                        decimal.TryParse(
+                            p.GetString(),
+                            NumberStyles.Any,
+                            CultureInfo.InvariantCulture,
+                            out d))
+                        return d;
+                }
+            }
+            return null;
+        }
+
+        private static bool? GetBool(JsonElement el, params string[] names)
+        {
+            foreach (var n in names)
+            {
+                if (el.TryGetProperty(n, out var p))
+                {
+                    if (p.ValueKind == JsonValueKind.True) return true;
+                    if (p.ValueKind == JsonValueKind.False) return false;
+
+                    if (p.ValueKind == JsonValueKind.String &&
+                        bool.TryParse(p.GetString(), out var b))
+                        return b;
+                }
+            }
+            return null;
+        }
+
+        private static DateTime? GetDate(JsonElement el, params string[] names)
+        {
+            foreach (var n in names)
+            {
+                if (el.TryGetProperty(n, out var p) &&
+                    p.ValueKind == JsonValueKind.String &&
+                    DateTime.TryParse(p.GetString(), out var dt))
+                {
+                    return dt;
+                }
+            }
+            return null;
+        }
+
         private async void HideSkipLink()
         {
             if (webViewLogin.CoreWebView2 == null)
@@ -149,7 +258,7 @@ namespace ERPI_BDO
             }
         }
 
-               private async Task InitWebViewAsync()
+        private async Task InitWebViewAsync()
         {
             _webEnv = await CoreWebView2Environment.CreateAsync(
                 null,
@@ -166,31 +275,28 @@ namespace ERPI_BDO
         }
         private async void btnPobierzKpo_Click(object sender, EventArgs e)
         {
-            DebugLogger.Add("=== btnPobierzKpo_Click (Unified for receiver/sender/transport) ===");
-
+            DebugLogger.Add("=== btnPobierzKpo_Click (STABLE – 3 SEARCH ENDPOINTS) ===");
             StartKpoLoading("Czytam karty");
 
             try
             {
                 if (_eupContext == null || string.IsNullOrEmpty(_eupToken))
                 {
-                    DebugLogger.Add("Blad: Brak kontekstu lub tokena EUP.");
-                    lblStatus.Text = "Błąd: Brakuje kontekstu EUP. Wybierz EUP ponownie.";
+                    lblStatus.Text = "Błąd: Brakuje kontekstu EUP.";
                     lblStatus.ForeColor = Color.Red;
-                    StopKpoLoading();
                     return;
                 }
 
                 if (_apiClient == null)
                 {
-                    DebugLogger.Add("Blad: Klient API nie jest zainicjalizowany. Wybierz EUP ponownie.");
-                    lblStatus.Text = "Błąd: Klient API nie jest gotowy. Wybierz EUP ponownie.";
+                    lblStatus.Text = "Błąd: Klient API nie jest gotowy.";
                     lblStatus.ForeColor = Color.Red;
-                    StopKpoLoading();
                     return;
                 }
 
-                // 1) Receiver (przejmujący) - używamy ReceiveConfirmationDateRange
+                // =========================================================
+                // 1) RECEIVER
+                // =========================================================
                 var receiverCriteria = new
                 {
                     PaginationParameters = new
@@ -199,23 +305,30 @@ namespace ERPI_BDO
                         Page = new { Index = 0, Size = 50 }
                     },
                     Year = dtKpoOd.Value.Year,
+
                     SearchInCarriers = true,
                     SearchInSenders = true,
+
                     ReceiveConfirmationDateRange = true,
                     ReceiveConfirmationDateFrom = dtKpoOd.Value.ToString("yyyy-MM-ddT00:00:00.000Z"),
                     ReceiveConfirmationDateTo = dtKpoDo.Value.ToString("yyyy-MM-ddT23:59:59.999Z"),
+
+                    // 🔴 MUSI BYĆ JAWNIE
                     TransportDateRange = false,
                     TransportDateFrom = (string?)null,
                     TransportDateTo = (string?)null
                 };
 
+
                 var receiverList = await PostSearchAndBuildFullDetailsListAsync(
                     "/api/WasteRegister/WasteTransferCard/v1/Kpo/receiver/search",
                     receiverCriteria,
-                    companyType: 2 // ReceiverCompany
+                    companyType: 2
                 );
 
-                // 2) Sender (przekazujący) - używamy TransportDateRange (zgodnie z Twoim wcześniejszym kodem)
+                // =========================================================
+                // 2) SENDER
+                // =========================================================
                 var senderCriteria = new
                 {
                     PaginationParameters = new
@@ -224,24 +337,30 @@ namespace ERPI_BDO
                         Page = new { Index = 0, Size = 50 }
                     },
                     Year = dtKpoOd.Value.Year,
+
                     SearchInCarriers = true,
                     SearchInReceivers = true,
-                    ReceiveConfirmationDateRange = false,
-                    ReceiveConfirmationDateFrom = (string?)null,
-                    ReceiveConfirmationDateTo = (string?)null,
+
                     TransportDateRange = true,
                     TransportDateFrom = dtKpoOd.Value.ToString("yyyy-MM-ddT00:00:00.000Z"),
-                    TransportDateTo = dtKpoDo.Value.ToString("yyyy-MM-ddT23:59:59.999Z")
+                    TransportDateTo = dtKpoDo.Value.ToString("yyyy-MM-ddT23:59:59.999Z"),
+
+                    // 🔴 MUSI BYĆ JAWNIE
+                    ReceiveConfirmationDateRange = false,
+                    ReceiveConfirmationDateFrom = (string?)null,
+                    ReceiveConfirmationDateTo = (string?)null
                 };
+
 
                 var senderList = await PostSearchAndBuildFullDetailsListAsync(
                     "/api/WasteRegister/WasteTransferCard/v1/Kpo/sender/search",
                     senderCriteria,
-                    companyType: 0 // SenderCompany
+                    companyType: 0
                 );
 
-                // 3) Transport / Carrier — endpointy w BDO mogą nazywać się "carrier/search" lub "transport/search".
-                // Jeśli w Twojej dokumentacji inna nazwa — zmień poniższy URL odpowiednio.
+                // =========================================================
+                // 3) CARRIER
+                // =========================================================
                 var transportCriteria = new
                 {
                     PaginationParameters = new
@@ -250,64 +369,54 @@ namespace ERPI_BDO
                         Page = new { Index = 0, Size = 50 }
                     },
                     Year = dtKpoOd.Value.Year,
+
                     SearchInSenders = true,
                     SearchInReceivers = true,
-                    ReceiveConfirmationDateRange = false,
+
                     TransportDateRange = true,
                     TransportDateFrom = dtKpoOd.Value.ToString("yyyy-MM-ddT00:00:00.000Z"),
-                    TransportDateTo = dtKpoDo.Value.ToString("yyyy-MM-ddT23:59:59.999Z")
+                    TransportDateTo = dtKpoDo.Value.ToString("yyyy-MM-ddT23:59:59.999Z"),
+
+                    // 🔴 MUSI BYĆ JAWNIE
+                    ReceiveConfirmationDateRange = false,
+                    ReceiveConfirmationDateFrom = (string?)null,
+                    ReceiveConfirmationDateTo = (string?)null
                 };
 
-                // Uwaga: jeśli Twój API wymaga innej ścieżki dla transportującego, zamień "/Kpo/carrier/search" na właściwą.
+
                 var transportList = await PostSearchAndBuildFullDetailsListAsync(
                     "/api/WasteRegister/WasteTransferCard/v1/Kpo/carrier/search",
                     transportCriteria,
-                    companyType: 1 // CarrierCompany
+                    companyType: 1
                 );
 
-                // Bind i konfiguracja kolumn - użyjemy tej samej konfiguracji kolumn dla wszystkich trzech gridów
+                // =========================================================
+                // BIND GRIDÓW (jak było)
+                // =========================================================
                 this.Invoke((MethodInvoker)delegate
                 {
-                    // Receiver grid
-                    dgvKpo.SuspendLayout();
-                    dgvKpo.DataSource = null;
-                    ConfigureDgvKpoColumns(dgvKpo);
                     dgvKpo.DataSource = receiverList;
-                    dgvKpo.ResumeLayout();
-
-                    // Sender grid
-                    dgvKpoSender.SuspendLayout();
-                    dgvKpoSender.DataSource = null;
-                    ConfigureDgvKpoColumns(dgvKpoSender);
                     dgvKpoSender.DataSource = senderList;
-                    dgvKpoSender.ResumeLayout();
-
-                    // Transport grid
-                    dgvKpoTransport.SuspendLayout();
-                    dgvKpoTransport.DataSource = null;
-                    ConfigureDgvKpoColumns(dgvKpoTransport);
                     dgvKpoTransport.DataSource = transportList;
-                    dgvKpoTransport.ResumeLayout();
 
-                    lblStatus.Text = $"Pobrano: receiver={receiverList.Count}, sender={senderList.Count}, transport={transportList.Count}";
+                    lblStatus.Text =
+                        $"Pobrano: receiver={receiverList.Count}, sender={senderList.Count}, transport={transportList.Count}";
                     lblStatus.ForeColor = Color.Green;
                 });
             }
             catch (Exception ex)
             {
-                DebugLogger.Add($"Wyjatek: {ex.Message}");
-                this.Invoke((MethodInvoker)delegate
-                {
-                    lblStatus.Text = "Wystąpił wyjątek podczas pobierania KPO.";
-                    lblStatus.ForeColor = Color.Red;
-                    MessageBox.Show($"Wystąpił wyjątek podczas pobierania KPO:\n{ex.Message}", "Błąd krytyczny", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                });
+                DebugLogger.Add(ex.ToString());
+                MessageBox.Show(ex.Message, "Błąd", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             finally
             {
                 StopKpoLoading();
             }
         }
+
+
+
 
         // Pomocnik: wysyła POST search, deserializuje wynik i dla każdego item pobiera szczegóły oraz mapuje na KpoReceiverFullDetailsDto
         private void ConfigureDgvKpoColumns(DataGridView dgv)
@@ -406,316 +515,433 @@ namespace ERPI_BDO
                 dgv.Columns.Add(c);
             }
         }
-
-        private async Task<List<KpoReceiverFullDetailsDto>> PostSearchAndBuildFullDetailsListAsync(string relativeUrl, object searchCriteria, int companyType)
+        private async Task<List<KpoReceiverFullDetailsDto>>
+     PostSearchAndBuildFullDetailsListAsync(
+         string searchUrl,
+         object searchCriteria,
+         int companyType // 0=Sender, 1=Carrier, 2=Receiver
+     )
         {
-            var list = new List<KpoReceiverFullDetailsDto>();
+            DebugLogger.Add("=== PostSearchAndBuildFullDetailsListAsync START ===");
+            DebugLogger.Add($"SEARCH URL = {searchUrl}");
+            DebugLogger.Add($"COMPANY TYPE = {companyType}");
 
-            string jsonPayload = JsonSerializer.Serialize(searchCriteria);
-            var request = new HttpRequestMessage(HttpMethod.Post, relativeUrl)
+            var result = new List<KpoReceiverFullDetailsDto>();
+
+            // =========================================================
+            // HTTP CLIENT (EUP)
+            // =========================================================
+            using var eupClient = new HttpClient
             {
-                Content = new StringContent(jsonPayload, Encoding.UTF8, "application/json")
+                BaseAddress = new Uri(BdoConfig.BaseUrl)
             };
+            eupClient.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", _eupToken);
 
-            request.Headers.Add("X-Eup-Id", _eupContext!.EupId.ToString());
-            request.Headers.Add("X-Company-Id", _eupContext.CompanyId.ToString());
-            request.Headers.Add("X-Year-Context", searchCriteria.GetType().GetProperty("Year")?.GetValue(searchCriteria)?.ToString() ?? DateTime.Now.Year.ToString());
+            // =========================================================
+            // SEARCH
+            // =========================================================
+            var payloadJson = JsonSerializer.Serialize(searchCriteria);
+            DebugLogger.Add($"SEARCH PAYLOAD = {payloadJson}");
 
-            var response = await _apiClient!.SendAsync(request);
+            var response = await eupClient.PostAsync(
+                searchUrl,
+                new StringContent(payloadJson, Encoding.UTF8, "application/json")
+            );
+
             var body = await response.Content.ReadAsStringAsync();
 
-            DebugLogger.Add($"Status HTTP: {(int)response.StatusCode} dla {relativeUrl}");
-            DebugLogger.Add($"Odpowiedź API: {body}");
+            DebugLogger.Add($"SEARCH STATUS = {(int)response.StatusCode}");
+            DebugLogger.Add($"SEARCH BODY LENGTH = {body.Length}");
 
             if (!response.IsSuccessStatusCode)
             {
-                DebugLogger.Add($"Blad BDO przy {relativeUrl}: {body}");
-                return list;
+                DebugLogger.Add("SEARCH ERROR BODY:");
+                DebugLogger.Add(body);
+                return result;
             }
 
             using var doc = JsonDocument.Parse(body);
-            if (!doc.RootElement.TryGetProperty("items", out var items) || items.ValueKind != JsonValueKind.Array)
-                return list;
 
-            string? GetString(JsonElement el, params string[] names)
+            if (!doc.RootElement.TryGetProperty("items", out var items) ||
+                items.ValueKind != JsonValueKind.Array)
             {
-                foreach (var n in names)
-                    if (el.TryGetProperty(n, out var p) && p.ValueKind != JsonValueKind.Null)
-                        return p.ValueKind == JsonValueKind.String ? p.GetString() : p.ToString();
-                return null;
+                DebugLogger.Add("SEARCH: items[] not found");
+                return result;
             }
 
-            decimal? GetDecimal(JsonElement el, params string[] names)
+            DebugLogger.Add($"SEARCH ITEMS COUNT = {items.GetArrayLength()}");
+
+            // =========================================================
+            // ITERACJA PO KARTACH
+            // =========================================================
+            foreach (var item in items.EnumerateArray())
             {
-                foreach (var n in names)
-                    if (el.TryGetProperty(n, out var p) && (p.ValueKind == JsonValueKind.Number || p.ValueKind == JsonValueKind.String))
-                    {
-                        if (p.TryGetDecimal(out var d)) return d;
-                        if (decimal.TryParse(p.GetRawText().Trim('"'), NumberStyles.Any, CultureInfo.InvariantCulture, out d)) return d;
-                    }
-                return null;
-            }
-
-            DateTime? GetDateTime(JsonElement el, params string[] names)
-            {
-                foreach (var n in names)
-                    if (el.TryGetProperty(n, out var p) && p.ValueKind == JsonValueKind.String)
-                    {
-                        if (DateTime.TryParse(p.GetString(), CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal, out var dt))
-                            return dt;
-                    }
-                return null;
-            }
-
-            Guid? GetGuid(JsonElement el, params string[] names)
-            {
-                foreach (var n in names)
-                    if (el.TryGetProperty(n, out var p) && p.ValueKind == JsonValueKind.String)
-                    {
-                        if (Guid.TryParse(p.GetString(), out var g)) return g;
-                    }
-                return null;
-            }
-
-            DateTime? ParseDateAndTimeStrings(string? dateStr, string? timeStr)
-            {
-                if (string.IsNullOrWhiteSpace(dateStr) && string.IsNullOrWhiteSpace(timeStr))
-                    return null;
-
-                if (!string.IsNullOrWhiteSpace(dateStr))
+                var kpoId = GetGuid(item, "kpoId");
+                if (kpoId == null)
                 {
-                    if (DateTime.TryParse(dateStr, CultureInfo.InvariantCulture, DateTimeStyles.AssumeLocal, out var dtFull))
-                        return dtFull;
-                }
-
-                if (!string.IsNullOrWhiteSpace(dateStr) && !string.IsNullOrWhiteSpace(timeStr))
-                {
-                    var combined = $"{dateStr} {timeStr}";
-                    if (DateTime.TryParse(combined, CultureInfo.InvariantCulture, DateTimeStyles.AssumeLocal, out var dt))
-                        return dt;
-                }
-
-                if (string.IsNullOrWhiteSpace(dateStr) && !string.IsNullOrWhiteSpace(timeStr))
-                {
-                    if (TimeSpan.TryParse(timeStr, CultureInfo.InvariantCulture, out var ts))
-                        return DateTime.Today.Add(ts);
-                }
-
-                return null;
-            }
-
-            foreach (var itemEl in items.EnumerateArray())
-            {
-                try
-                {
-                    var kpoId = GetGuid(itemEl, "kpoId", "KpoId");
-                    if (kpoId == null) { DebugLogger.Add("Brak kpoId w elemencie listy — pomijam."); continue; }
-
-                    var cardNumber = GetString(itemEl, "cardNumber", "kpoNumber", "KpoNumber");
-                    var listWasteMass = GetDecimal(itemEl, "wasteMass", "quantity", "Quantity");
-
-                    KpoDetailsDto? details = null;
-                    try
-                    {
-                        details = await _bdoService.GetKpoDetailsAsync(kpoId.Value, _apiClient, companyType, DebugLogger.Add);
-                    }
-                    catch (Exception ex)
-                    {
-                        DebugLogger.Add($"Błąd pobierania szczegółów dla {kpoId}: {ex.Message}");
-                    }
-
-                    decimal? wasteMass = details?.WasteMass ?? listWasteMass;
-                    decimal? corrected = GetDecimal(itemEl, "correctedWasteMass");
-                    decimal? revised = GetDecimal(itemEl, "revisedWasteMass");
-
-                    DateTime? plannedTransport = details?.PlannedTransportTime;
-                    DateTime? realTransport = null;
-                    if (details != null)
-                    {
-                        realTransport = ParseDateAndTimeStrings(details.RealTransportDate, details.RealTransportTime) ?? GetDateTime(itemEl, "realTransportTime");
-                    }
-                    else
-                    {
-                        realTransport = GetDateTime(itemEl, "realTransportTime");
-                    }
-
-                    DateTime? cardApprovalTime = ParseDateAndTimeStrings(details?.ApprovalDate, details?.ApprovalTime) ?? GetDateTime(itemEl, "cardApprovalTime");
-                    DateTime? receiveConfirmationTime = ParseDateAndTimeStrings(details?.ReceiveConfirmationDate, details?.ReceiveConfirmationTime) ?? GetDateTime(itemEl, "acceptanceDate", "receiveConfirmationTime");
-
-                    var dto = new KpoReceiverFullDetailsDto
-                    {
-                        KpoId = kpoId.Value,
-                        Year = details?.Year,
-                        CardNumber = details?.CardNumber ?? cardNumber,
-                        CardStatus = details?.CardStatus ?? GetString(itemEl, "cardStatus"),
-                        CardStatusId = details?.CardStatusId,
-                        CardStatusCodeName = details?.CardStatusCodeName ?? GetString(itemEl, "cardStatusCodeName"),
-
-                        SenderCompanyId = details?.SenderCompanyId ?? GetGuid(itemEl, "senderCompanyId"),
-                        SenderEupId = details?.SenderEupId ?? GetGuid(itemEl, "senderEupId"),
-                        SenderCompanyName = details?.SenderCompanyName ?? details?.SenderName ?? GetString(itemEl, "senderCompanyName", "senderName"),
-                        SenderFirstNameAndLastName = details?.SenderFirstNameAndLastName ?? GetString(itemEl, "senderFirstNameAndLastName"),
-                        SenderName = details?.SenderName ?? GetString(itemEl, "senderName"),
-
-                        ReceiverCompanyId = details?.ReceiverCompanyId ?? GetGuid(itemEl, "receiverCompanyId"),
-                        ReceiverEupId = details?.ReceiverEupId ?? GetGuid(itemEl, "receiverEupId"),
-                        // POPRAWKA: używamy właściwej nazwy pola z KpoDetailsDto (ReceiverFirstNameAndLastName)
-                        ReceiverFirstAndLastName = details?.ReceiverFirstNameAndLastName 
-                            ?? GetString(itemEl, "receiverFirstNameAndLastName", "receiverFirstAndLastName", "receiverFirstAndLast"),
-                        ReceiverCompanyName = details?.ReceiverCompanyName ?? GetString(itemEl, "receiverCompanyName", "receiverName"),
-                        ReceiverName = details?.ReceiverName ?? GetString(itemEl, "receiverName"),
-
-                        CarrierCompanyId = details?.CarrierCompanyId ?? GetGuid(itemEl, "carrierCompanyId"),
-                        CarrierEupId = null,
-                        CarrierCompanyName = details?.CarrierCompanyName ?? details?.CarrierName ?? GetString(itemEl, "carrierCompanyName", "carrierName"),
-
-                        WasteCode = details?.WasteCode ?? GetString(itemEl, "wasteCode"),
-                        WasteCodeId = details?.WasteCodeId,
-                        WasteCodeDescription = details?.WasteCodeAndDescription ?? GetString(itemEl, "wasteCodeDescription", "wasteCodeAndDescription"),
-                        WasteCodeExtended = details?.WasteCodeExtended,
-                        WasteCodeExtendedDescription = details?.WasteCodeExtendedDescription,
-                        WasteMass = wasteMass,
-                        CorrectedWasteMass = corrected,
-                        RevisedWasteMass = revised,
-                        RevisedWasteCodeId = null,
-                        IsWasteGenerating = details?.IsWasteGenerating,
-                        WasteGeneratingAdditionalInfo = details?.WasteGeneratingAdditionalInfo,
-                        WasteGeneratedTerytPk = details?.WasteGeneratedTerytPk,
-                        WasteProcessId = details?.WasteProcessId,
-
-                        IsRevised = details?.IsRevised ?? (GetString(itemEl, "isRevised") == "true"),
-                        RevisedAt = GetDateTime(itemEl, "revisedAt"),
-                        RevisedBy = GetString(itemEl, "revisedBy") ?? details?.ApprovedByUser,
-
-                        PlannedTransportTime = plannedTransport,
-                        RealTransportTime = realTransport,
-                        ReceiveConfirmationTime = receiveConfirmationTime,
-                        TransportConfirmationTime = GetDateTime(itemEl, "transportConfirmationTime"),
-                        CardApprovalTime = cardApprovalTime,
-                        CardRejectionTime = GetDateTime(itemEl, "cardRejectionTime"),
-                        GeneratingConfirmationTime = GetDateTime(itemEl, "generatingConfirmationTime"),
-                        ApprovalUser = details?.ApprovedByUser ?? GetString(itemEl, "approvalUser"),
-                        TransportConfirmationUser = GetString(itemEl, "transportConfirmationUser"),
-                        GeneratingConfirmationUser = GetString(itemEl, "generatingConfirmationUser"),
-                        ReceiveConfirmationUser = details?.ReceiveConfirmedByUser ?? GetString(itemEl, "receiveConfirmationUser"),
-                        RejectedByUser = details?.RejectedByUser ?? GetString(itemEl, "rejectedByUser", "rejectedByUserFirstNameAndLastName"),
-
-                        VehicleRegNumber = details?.VehicleRegNumber ?? GetString(itemEl, "vehicleRegNumber", "vehicleRegNo"),
-                        CertificateNumberAndBoxNumbers = details?.CertificateNumberAndBoxNumbers ?? GetString(itemEl, "certificateNumberAndBoxNumbers"),
-                        AdditionalInfo = details?.AdditionalInfo ?? GetString(itemEl, "additionalInfo"),
-                        HazardousWasteReclassification = details?.HazardousWasteReclassification,
-                        HazardousWasteReclassificationDescription = details?.HazardousWasteReclassificationDescription ?? GetString(itemEl, "hazardousWasteReclassificationDescription"),
-                        Remarks = details?.Remarks ?? GetString(itemEl, "remarks"),
-
-                        CreatedBy = GetString(itemEl, "createdBy"),
-                        CreatedDate = GetDateTime(itemEl, "kpoLastModifiedAt") ?? DateTime.MinValue,
-                        IdentificationNumber = details?.IdentificationNumber ?? details?.SenderIdentificationNumber ?? GetString(itemEl, "identificationNumber"),
-                        Nip = details?.Nip ?? details?.SenderNip ?? GetString(itemEl, "nip"),
-                        AddressHtml = details?.AddressHtml ?? details?.SenderAddress ?? details?.SenderEupAddress ?? GetString(itemEl, "addressHtml"),
-                        PostalCode = details?.PostalCode ?? details?.SenderEupAddress ?? GetString(itemEl, "postalCode"),
-                        CountryName = details?.CountryName ?? GetString(itemEl, "countryName"),
-                        Locality = details?.Locality ?? GetString(itemEl, "locality"),
-                        Street = details?.Street ?? GetString(itemEl, "street"),
-                        BuildingNumber = details?.BuildingNumber ?? GetString(itemEl, "buildingNumber"),
-                        LocalNumber = details?.LocalNumber ?? GetString(itemEl, "localNumber"),
-                        AdditionalInfoForUi = details?.SenderEupName ?? details?.SenderEupNumber ?? GetString(itemEl, "additionalInfoUi")
-                    };
-
-                    dto.Quantity = dto.RevisedWasteMass ?? dto.WasteMass ?? dto.CorrectedWasteMass ?? listWasteMass ?? 0m;
-
-                    DebugLogger.Add($"KPO {dto.CardNumber ?? kpoId.ToString()}: wasteMass={dto.WasteMass?.ToString() ?? "null"}, corrected={dto.CorrectedWasteMass?.ToString() ?? "null"}, revised={dto.RevisedWasteMass?.ToString() ?? "null"}, Quantity={dto.Quantity}");
-
-                    list.Add(dto);
-                }
-                catch (Exception ex)
-                {
-                    DebugLogger.Add($"Wyjątek podczas mapowania elementu listy KPO: {ex.Message}");
+                    DebugLogger.Add("SKIP ITEM: kpoId is null");
                     continue;
                 }
-            }
 
-            return list;
-        }
-        // --- Początek nowego kodu dla KPO Przekazującego ---
-        private async void btnPobierzKpoSender_Click(object sender, EventArgs e)
-        {
-            DebugLogger.Add("=== btnPobierzKpoSender_Click (shared PostSearchAndBuildFullDetailsListAsync) ===");
+                DebugLogger.Add($"--- KPO {kpoId} START ---");
 
-            try
-            {
-                if (_eupContext == null || string.IsNullOrEmpty(_eupToken))
+                var dto = new KpoReceiverFullDetailsDto
                 {
-                    DebugLogger.Add("Blad: Brak kontekstu lub tokena EUP.");
-                    this.Invoke((MethodInvoker)delegate
-                    {
-                        lblStatus.Text = "Błąd: Brak wybranego EUP lub tokena.";
-                        lblStatus.ForeColor = Color.Red;
-                    });
-                    return;
-                }
+                    // =================================================
+                    // IDENTYFIKACJA
+                    // =================================================
+                    KpoId = kpoId.Value,
+                    Year = GetInt(item, "year"),
+                    CardNumber = GetString(item, "cardNumber"),
 
-                if (_apiClient == null)
-                {
-                    DebugLogger.Add("Blad: Klient API nie jest zainicjalizowany. Wybierz EUP ponownie.");
-                    this.Invoke((MethodInvoker)delegate
-                    {
-                        lblStatus.Text = "Błąd: Klient API nie jest gotowy.";
-                        lblStatus.ForeColor = Color.Red;
-                    });
-                    return;
-                }
+                    // =================================================
+                    // STATUS (LIST)
+                    // =================================================
+                    List_CardStatus = GetString(item, "cardStatus"),
+                    List_CardStatusId = GetInt(item, "cardStatusId"),
+                    List_CardStatusCodeName = GetString(item, "cardStatusCodeName"),
 
-                var senderCriteria = new
-                {
-                    PaginationParameters = new
-                    {
-                        Order = new { IsAscending = false, OrderColumn = "WasteTransferCardNumber" },
-                        Page = new { Index = 0, Size = 50 }
-                    },
-                    Year = dtKpoOd.Value.Year,
-                    SearchInCarriers = true,
-                    SearchInReceivers = true,
-                    ReceiveConfirmationDateRange = false,
-                    ReceiveConfirmationDateFrom = (string?)null,
-                    ReceiveConfirmationDateTo = (string?)null,
-                    TransportDateRange = true,
-                    TransportDateFrom = dtKpoOd.Value.ToString("yyyy-MM-ddT00:00:00.000Z"),
-                    TransportDateTo = dtKpoDo.Value.ToString("yyyy-MM-ddT23:59:59.999Z")
+                    // =================================================
+                    // ODPAD (LIST)
+                    // =================================================
+                    WasteCodeId = GetInt(item, "wasteCodeId"),
+                    WasteCode = GetString(item, "wasteCode"),
+                    WasteCodeDescription = GetString(item, "wasteCodeDescription"),
+                    WasteCodeExtended = GetBool(item, "wasteCodeExtended"),
+
+                    // =================================================
+                    // DATY / MASY (LIST)
+                    // =================================================
+                    List_PlannedTransportTime = GetDate(item, "plannedTransportTime"),
+                    List_RealTransportTime = GetDate(item, "realTransportTime"),
+                    List_ReceiveConfirmationTime = GetDate(item, "receiveConfirmationTime"),
+                    List_WasteMass = GetDecimal(item, "wasteMass"),
+
+                    // =================================================
+                    // SENDER (LIST)
+                    // =================================================
+                    Sender_List_CompanyId = GetGuid(item, "senderCompanyId"),
+                    Sender_List_EupId = GetGuid(item, "senderEupId"),
+                    Sender_List_CompanyName = GetString(item, "senderCompanyName"),
+                    Sender_List_FirstNameAndLastName =
+                        GetString(item, "senderFirstNameAndLastName"),
+
+                    // =================================================
+                    // RECEIVER (LIST)
+                    // =================================================
+                    Receiver_List_CompanyId = GetGuid(item, "receiverCompanyId"),
+                    Receiver_List_EupId = GetGuid(item, "receiverEupId"),
+                    Receiver_List_CompanyName = GetString(item, "receiverCompanyName"),
+                    Receiver_List_FirstNameAndLastName =
+                        GetString(item, "receiverFirstNameAndLastName"),
+
+                    // =================================================
+                    // CARRIER (LIST)
+                    // =================================================
+                    Carrier_List_CompanyId = GetGuid(item, "carrierCompanyId"),
+                    Carrier_List_EupId = GetGuid(item, "carrierEupId"),
+                    Carrier_List_CompanyName = GetString(item, "carrierCompanyName"),
+                    Carrier_List_VehicleRegNumber =
+                        GetString(item, "vehicleRegNumber")
                 };
 
-                var senderList = await PostSearchAndBuildFullDetailsListAsync(
-                    "/api/WasteRegister/WasteTransferCard/v1/Kpo/sender/search",
-                    senderCriteria,
-                    companyType: 0 // SenderCompany
+                // =====================================================
+                // DETAILS (TYLKO TEN companyType)
+                // =====================================================
+                var details = await _bdoService.GetKpoDetailsAsync(
+                    kpoId.Value,
+                    eupClient,
+                    companyType,
+                    DebugLogger.Add
                 );
 
-                this.Invoke((MethodInvoker)delegate
+                if (details != null)
                 {
-                    dgvKpoSender.SuspendLayout();
-                    dgvKpoSender.DataSource = null;
-                    ConfigureDgvKpoColumns(dgvKpoSender);
-                    dgvKpoSender.DataSource = senderList;
-                    dgvKpoSender.ResumeLayout();
+                    DebugLogger.Add($"DETAILS OK for {kpoId}");
 
-                    lblStatus.Text = $"Pobrano {senderList.Count} kart (Sender).";
-                    lblStatus.ForeColor = Color.Green;
-                });
+                    // =================================================
+                    // SENDER DETAILS
+                    // =================================================
+                    dto.Sender_Details_CompanyId = details.SenderCompanyId;
+                    dto.Sender_Details_EupId = details.SenderEupId;
+                    dto.Sender_Details_CompanyName = details.SenderCompanyName;
+                    dto.Sender_Details_FirstNameAndLastName =
+                        details.SenderFirstNameAndLastName;
+                    dto.Sender_Details_IdentificationNumber =
+                        details.SenderIdentificationNumber;
+                    dto.Sender_Details_Nip = details.SenderNip;
 
-                DebugLogger.Add("Sukces! Dane KPO Przekazującego pobrane i zmapowane do DTO.");
+                    // =================================================
+                    // RECEIVER DETAILS
+                    // =================================================
+                    dto.Receiver_Details_CompanyId = details.ReceiverCompanyId;
+                    dto.Receiver_Details_EupId = details.ReceiverEupId;
+                    dto.Receiver_Details_CompanyName = details.ReceiverCompanyName;
+                    dto.Receiver_Details_FirstNameAndLastName =
+                        details.ReceiverFirstNameAndLastName;
+                    dto.Receiver_Details_IdentificationNumber =
+                        details.ReceiverIdentificationNumber;
+                    dto.Receiver_Details_Nip = details.ReceiverNip;
+
+                    // =================================================
+                    // CARRIER DETAILS
+                    // =================================================
+                    dto.Carrier_Details_CompanyId = details.CarrierCompanyId;
+                    dto.Carrier_Details_EupId = details.CarrierEupId;
+                    dto.Carrier_Details_CompanyName = details.CarrierCompanyName;
+                    dto.Carrier_Details_IdentificationNumber =
+                        details.IdentificationNumber;
+                    dto.Carrier_Details_Nip = details.Nip;
+                    dto.Carrier_Details_EuNip = details.EuNip;
+                    dto.Carrier_Details_RegistryNumber =
+                        details.RegistrationNumber;
+
+                    // =================================================
+                    // ADRES (DETAILS – wspólny)
+                    // =================================================
+
+                }
+                else
+                {
+                    DebugLogger.Add($"DETAILS NOT FOUND for {kpoId}");
+                }
+
+                result.Add(dto);
+                DebugLogger.Add($"--- KPO {kpoId} END ---");
+            }
+
+            DebugLogger.Add(
+                $"=== PostSearchAndBuildFullDetailsListAsync END | COUNT={result.Count} ===");
+
+            return result;
+        }
+
+
+        private async Task<List<KpoReceiverFullDetailsDto>> PostSearchAndBuildFullDetailsListAsync1(
+      string relativeUrl,
+      object searchCriteria)
+        {
+            DebugLogger.Add("=== PostSearchAndBuildFullDetailsListAsync START (3×DETAILS) ===");
+
+            var result = new List<KpoReceiverFullDetailsDto>();
+
+            if (_apiClient == null || _eupContext == null)
+            {
+                DebugLogger.Add("ERROR: _apiClient or _eupContext is NULL");
+                return result;
+            }
+
+            var payload = JsonSerializer.Serialize(searchCriteria);
+            DebugLogger.Add($"SEARCH URL = {relativeUrl}");
+            DebugLogger.Add($"SEARCH PAYLOAD = {payload}");
+
+            var request = new HttpRequestMessage(HttpMethod.Post, relativeUrl)
+            {
+                Content = new StringContent(payload, Encoding.UTF8, "application/json")
+            };
+
+            request.Headers.Add("X-Eup-Id", _eupContext.EupId.ToString());
+            request.Headers.Add("X-Company-Id", _eupContext.CompanyId.ToString());
+            request.Headers.Add("X-Year-Context", _eupContext.Year.ToString());
+
+            HttpResponseMessage response;
+            try
+            {
+                response = await _apiClient.SendAsync(request);
             }
             catch (Exception ex)
             {
-                DebugLogger.Add($"Wyjatek dla KPO Przekazującego: {ex.Message}");
-                this.Invoke((MethodInvoker)delegate
-                {
-                    lblStatus.Text = "Wystąpił wyjątek podczas pobierania KPO Przekazującego.";
-                    lblStatus.ForeColor = Color.Red;
-                    MessageBox.Show($"Wystąpił wyjątek podczas pobierania KPO Przekazującego:\n{ex.Message}", "Błąd krytyczny", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                });
+                DebugLogger.Add($"HTTP EXCEPTION (SEARCH): {ex}");
+                return result;
             }
-        }
-        // --- Koniec nowego kodu dla KPO Przekazującego ---
 
+            var body = await response.Content.ReadAsStringAsync();
+            DebugLogger.Add($"SEARCH STATUS = {(int)response.StatusCode}");
+            DebugLogger.Add($"SEARCH BODY LENGTH = {body.Length}");
+
+            if (!response.IsSuccessStatusCode)
+            {
+                DebugLogger.Add("SEARCH ERROR BODY:");
+                DebugLogger.Add(body);
+                return result;
+            }
+
+            using var doc = JsonDocument.Parse(body);
+
+            if (!doc.RootElement.TryGetProperty("items", out var items) ||
+                items.ValueKind != JsonValueKind.Array)
+            {
+                DebugLogger.Add("ERROR: SEARCH response has no items[]");
+                return result;
+            }
+
+            DebugLogger.Add($"SEARCH ITEMS COUNT = {items.GetArrayLength()}");
+
+            // =========================================================
+            // PĘTLA PO KPO
+            // =========================================================
+
+            foreach (var item in items.EnumerateArray())
+            {
+                if (!item.TryGetProperty("kpoId", out var kpoIdProp) ||
+                    !Guid.TryParse(kpoIdProp.GetString(), out var kpoId))
+                {
+                    DebugLogger.Add("SKIP: item without valid kpoId");
+                    continue;
+                }
+
+                DebugLogger.Add($"--- KPO {kpoId} START ---");
+
+                var dto = new KpoReceiverFullDetailsDto
+                {
+                    KpoId = kpoId,
+                    Year = item.TryGetProperty("year", out var y) ? y.GetInt32() : null,
+                    CardNumber = item.TryGetProperty("cardNumber", out var cn) ? cn.GetString() : null,
+
+                    // ================= LIST – SENDER =================
+                    Sender_List_CompanyId = GetGuid(item, "senderCompanyId"),
+                    Sender_List_EupId = GetGuid(item, "senderEupId"),
+                    Sender_List_CompanyName = GetString(item, "senderCompanyName", "senderName"),
+                    Sender_List_FirstNameAndLastName = GetString(item, "senderFirstNameAndLastName"),
+
+                    // ================= LIST – CARRIER =================
+                    Carrier_List_CompanyId = GetGuid(item, "carrierCompanyId"),
+                    Carrier_List_EupId = GetGuid(item, "carrierEupId"),
+                    Carrier_List_CompanyName = GetString(item, "carrierCompanyName"),
+                    Carrier_List_VehicleRegNumber = GetString(item, "vehicleRegNumber"),
+
+                    // ================= LIST – RECEIVER ================
+                    Receiver_List_CompanyId = GetGuid(item, "receiverCompanyId"),
+                    Receiver_List_EupId = GetGuid(item, "receiverEupId"),
+                    Receiver_List_CompanyName = GetString(item, "receiverCompanyName", "receiverName"),
+                    Receiver_List_FirstNameAndLastName = GetString(item, "receiverFirstNameAndLastName"),
+
+                    // ================= STATUS / ODPAD =================
+                    List_CardStatus = GetString(item, "cardStatus"),
+                    List_CardStatusId = GetInt(item, "cardStatusId"),
+                    List_CardStatusCodeName = GetString(item, "cardStatusCodeName"),
+
+                    WasteCodeId = GetInt(item, "wasteCodeId"),
+                    WasteCode = GetString(item, "wasteCode"),
+                    WasteCodeDescription = GetString(item, "wasteCodeDescription"),
+                    WasteCodeExtended = GetBool(item, "wasteCodeExtended"),
+
+                    List_WasteMass = GetDecimal(item, "wasteMass", "quantity"),
+                    List_PlannedTransportTime = GetDate(item, "plannedTransportTime"),
+                    List_RealTransportTime = GetDate(item, "realTransportTime"),
+                    List_ReceiveConfirmationTime = GetDate(item, "receiveConfirmationTime")
+                };
+
+                // =====================================================
+                // DETAILS – SENDER (CompanyType = 0)
+                // =====================================================
+                DebugLogger.Add($"[DETAILS:SENDER] Fetching for KPO {kpoId}");
+                var senderDetails = await _bdoService.GetKpoDetailsAsync(
+                    kpoId, _apiClient, 0, DebugLogger.Add);
+
+                if (senderDetails != null)
+                {
+                    dto.Sender_Details_CompanyId = senderDetails.SenderCompanyId;
+                    dto.Sender_Details_EupId = senderDetails.SenderEupId;
+                    dto.Sender_Details_CompanyName = senderDetails.SenderCompanyName;
+                    dto.Sender_Details_FirstNameAndLastName = senderDetails.SenderFirstNameAndLastName;
+                    dto.Sender_Details_IdentificationNumber = senderDetails.SenderIdentificationNumber;
+                    dto.Sender_Details_Nip = senderDetails.SenderNip;
+
+                    dto.Sender_Details_AddressHtml = senderDetails.AddressHtml;
+                    dto.Sender_Details_TerytPk = senderDetails.TerytPk;
+                    dto.Sender_Details_PostalCode = senderDetails.PostalCode;
+                    dto.Sender_Details_Locality = senderDetails.Locality;
+                    dto.Sender_Details_Street = senderDetails.Street;
+                    dto.Sender_Details_BuildingNumber = senderDetails.BuildingNumber;
+                    dto.Sender_Details_LocalNumber = senderDetails.LocalNumber;
+                    dto.Sender_Details_CountryName = senderDetails.CountryName;
+                }
+
+                // =====================================================
+                // DETAILS – CARRIER (CompanyType = 1)
+                // =====================================================
+                DebugLogger.Add($"[DETAILS:CARRIER] Fetching for KPO {kpoId}");
+                var carrierDetails = await _bdoService.GetKpoDetailsAsync(
+                    kpoId, _apiClient, 1, DebugLogger.Add);
+
+                if (carrierDetails != null)
+                {
+                    dto.Carrier_Details_CompanyId = carrierDetails.CarrierCompanyId;
+                    dto.Carrier_Details_EupId = carrierDetails.CarrierEupId;
+                    dto.Carrier_Details_CompanyName = carrierDetails.CarrierCompanyName;
+                    dto.Carrier_Details_IdentificationNumber = carrierDetails.IdentificationNumber;
+                    dto.Carrier_Details_Nip = carrierDetails.Nip;
+                    dto.Carrier_Details_EuNip = carrierDetails.EuNip;
+                    dto.Carrier_Details_RegistryNumber = carrierDetails.RegistrationNumber;
+
+                    dto.Carrier_Details_AddressHtml = carrierDetails.AddressHtml;
+                    dto.Carrier_Details_TerytPk = carrierDetails.TerytPk;
+                    dto.Carrier_Details_PostalCode = carrierDetails.PostalCode;
+                    dto.Carrier_Details_Locality = carrierDetails.Locality;
+                    dto.Carrier_Details_Street = carrierDetails.Street;
+                    dto.Carrier_Details_BuildingNumber = carrierDetails.BuildingNumber;
+                    dto.Carrier_Details_LocalNumber = carrierDetails.LocalNumber;
+                    dto.Carrier_Details_CountryName = carrierDetails.CountryName;
+                }
+
+                // =====================================================
+                // DETAILS – RECEIVER (CompanyType = 2)
+                // =====================================================
+                DebugLogger.Add($"[DETAILS:RECEIVER] Fetching for KPO {kpoId}");
+                var receiverDetails = await _bdoService.GetKpoDetailsAsync(
+                    kpoId, _apiClient, 2, DebugLogger.Add);
+
+                if (receiverDetails != null)
+                {
+                    dto.Receiver_Details_CompanyId = receiverDetails.ReceiverCompanyId;
+                    dto.Receiver_Details_EupId = receiverDetails.ReceiverEupId;
+                    dto.Receiver_Details_CompanyName = receiverDetails.ReceiverCompanyName;
+                    dto.Receiver_Details_FirstNameAndLastName = receiverDetails.ReceiverFirstNameAndLastName;
+                    dto.Receiver_Details_IdentificationNumber = receiverDetails.ReceiverIdentificationNumber;
+                    dto.Receiver_Details_Nip = receiverDetails.ReceiverNip;
+
+                    dto.Receiver_Details_AddressHtml = receiverDetails.AddressHtml;
+                    dto.Receiver_Details_TerytPk = receiverDetails.TerytPk;
+                    dto.Receiver_Details_PostalCode = receiverDetails.PostalCode;
+                    dto.Receiver_Details_Locality = receiverDetails.Locality;
+                    dto.Receiver_Details_Street = receiverDetails.Street;
+                    dto.Receiver_Details_BuildingNumber = receiverDetails.BuildingNumber;
+                    dto.Receiver_Details_LocalNumber = receiverDetails.LocalNumber;
+                    dto.Receiver_Details_CountryName = receiverDetails.CountryName;
+                }
+
+                // =====================================================
+                // EFFECTIVE
+                // =====================================================
+                dto.Effective_WasteMass =
+                    receiverDetails?.CorrectedWasteMass
+                    ?? receiverDetails?.RevisedWasteMass
+                    ?? receiverDetails?.WasteMass
+                    ?? dto.List_WasteMass;
+
+                dto.Effective_TransportTime =
+                    receiverDetails?.RealTransportTime
+                    ?? receiverDetails?.PlannedTransportTime;
+
+                dto.Effective_IsCorrected =
+                    receiverDetails?.CorrectedWasteMass.HasValue == true
+                    || receiverDetails?.IsRevised == true;
+
+                result.Add(dto);
+
+                DebugLogger.Add($"--- KPO {kpoId} END ---");
+            }
+
+            DebugLogger.Add($"=== PostSearchAndBuildFullDetailsListAsync END | COUNT={result.Count} ===");
+            return result;
+        }
+
+
+
+
+       
 
         private async void btnZaloguj_Click(object sender, EventArgs e)
         {

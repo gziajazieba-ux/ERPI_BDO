@@ -4,94 +4,158 @@ namespace ERPI_BDO.Api
 {
     public class KpoReceiverFullDetailsDto
     {
+        // =========================================================
+        // IDENTYFIKACJA KARTY (WSPÓLNA)
+        // =========================================================
+
         public Guid KpoId { get; set; }
         public int? Year { get; set; }
         public string? CardNumber { get; set; }
-        public string? CardStatus { get; set; }
-        public int? CardStatusId { get; set; }
-        public string? CardStatusCodeName { get; set; }
 
-        // Sender
-        public Guid? SenderCompanyId { get; set; }
-        public Guid? SenderEupId { get; set; }
-        public string? SenderCompanyName { get; set; }
-        public string? SenderFirstNameAndLastName { get; set; }
-        public string? SenderName { get; set; }
+        // =========================================================
+        // ======================= SENDER ==========================
+        // =========================================================
 
-        // Receiver
-        public Guid? ReceiverCompanyId { get; set; }
-        public Guid? ReceiverEupId { get; set; }
-        public string? ReceiverCompanyName { get; set; }
-        public string? ReceiverFirstAndLastName { get; set; }
-        public string? ReceiverName { get; set; }
+        // ---------- LIST ----------
+        public Guid? Sender_List_CompanyId { get; set; }
+        public Guid? Sender_List_EupId { get; set; }
+        public string? Sender_List_CompanyName { get; set; }
+        public string? Sender_List_Name { get; set; }
+        public string? Sender_List_FirstNameAndLastName { get; set; }
 
-        // Carrier
-        public Guid? CarrierCompanyId { get; set; }
-        public Guid? CarrierEupId { get; set; }
-        public string? CarrierCompanyName { get; set; }
+        // ---------- DETAILS ----------
+        public Guid? Sender_Details_CompanyId { get; set; }
+        public Guid? Sender_Details_EupId { get; set; }
+        public string? Sender_Details_CompanyName { get; set; }
+        public string? Sender_Details_Name { get; set; }
+        public string? Sender_Details_FirstNameAndLastName { get; set; }
+        public string? Sender_Details_IdentificationNumber { get; set; }
+        public string? Sender_Details_Nip { get; set; }
 
-        // MASS FIELDS — MUSZ¥ BYÆ
+        public string? Sender_Details_AddressHtml { get; set; }
+        public string? Sender_Details_TerytPk { get; set; }
+        public string? Sender_Details_PostalCode { get; set; }
+        public string? Sender_Details_Locality { get; set; }
+        public string? Sender_Details_Street { get; set; }
+        public string? Sender_Details_BuildingNumber { get; set; }
+        public string? Sender_Details_LocalNumber { get; set; }
+        public bool? Sender_Details_HasNoBuildingNumber { get; set; }
+        public bool? Sender_Details_ForeignCompany { get; set; }
+        public int? Sender_Details_CountryId { get; set; }
+        public string? Sender_Details_CountryName { get; set; }
+
+        // =========================================================
+        // ======================= CARRIER =========================
+        // =========================================================
+
+        // ---------- LIST ----------
+        public Guid? Carrier_List_CompanyId { get; set; }
+        public Guid? Carrier_List_EupId { get; set; }
+        public string? Carrier_List_CompanyName { get; set; }
+        public string? Carrier_List_VehicleRegNumber { get; set; }
+
+        // ---------- DETAILS ----------
+        public Guid? Carrier_Details_CompanyId { get; set; }
+        public Guid? Carrier_Details_EupId { get; set; }
+        public string? Carrier_Details_CompanyName { get; set; }
+
+        public string? Carrier_Details_IdentificationNumber { get; set; }
+        public string? Carrier_Details_Nip { get; set; }
+        public string? Carrier_Details_EuNip { get; set; }
+        public string? Carrier_Details_RegistryNumber { get; set; }
+
+        public string? Carrier_Details_AddressHtml { get; set; }
+        public string? Carrier_Details_TerytPk { get; set; }
+        public string? Carrier_Details_PostalCode { get; set; }
+        public string? Carrier_Details_Locality { get; set; }
+        public string? Carrier_Details_Street { get; set; }
+        public string? Carrier_Details_BuildingNumber { get; set; }
+        public string? Carrier_Details_LocalNumber { get; set; }
+        public bool? Carrier_Details_HasNoBuildingNumber { get; set; }
+        public bool? Carrier_Details_ForeignCompany { get; set; }
+        public int? Carrier_Details_CountryId { get; set; }
+        public string? Carrier_Details_CountryName { get; set; }
+
+        // =========================================================
+        // ====================== RECEIVER =========================
+        // =========================================================
+
+        // ---------- LIST ----------
+        public Guid? Receiver_List_CompanyId { get; set; }
+        public Guid? Receiver_List_EupId { get; set; }
+        public string? Receiver_List_CompanyName { get; set; }
+        public string? Receiver_List_Name { get; set; }
+        public string? Receiver_List_FirstNameAndLastName { get; set; }
+
+        // ---------- DETAILS ----------
+        public Guid? Receiver_Details_CompanyId { get; set; }
+        public Guid? Receiver_Details_EupId { get; set; }
+        public string? Receiver_Details_CompanyName { get; set; }
+        public string? Receiver_Details_Name { get; set; }
+        public string? Receiver_Details_FirstNameAndLastName { get; set; }
+        public string? Receiver_Details_IdentificationNumber { get; set; }
+        public string? Receiver_Details_Nip { get; set; }
+
+        public string? Receiver_Details_AddressHtml { get; set; }
+        public string? Receiver_Details_TerytPk { get; set; }
+        public string? Receiver_Details_PostalCode { get; set; }
+        public string? Receiver_Details_Locality { get; set; }
+        public string? Receiver_Details_Street { get; set; }
+        public string? Receiver_Details_BuildingNumber { get; set; }
+        public string? Receiver_Details_LocalNumber { get; set; }
+        public bool? Receiver_Details_HasNoBuildingNumber { get; set; }
+        public bool? Receiver_Details_ForeignCompany { get; set; }
+        public int? Receiver_Details_CountryId { get; set; }
+        public string? Receiver_Details_CountryName { get; set; }
+
+        // =========================================================
+        // ====================== STATUS / ODPAD ===================
+        // =========================================================
+
+        // LIST
+        public string? List_CardStatus { get; set; }
+        public int? List_CardStatusId { get; set; }
+        public string? List_CardStatusCodeName { get; set; }
+
+        // DETAILS
+        public string? Details_CardStatus { get; set; }
+        public int? Details_CardStatusId { get; set; }
+        public string? Details_CardStatusCodeName { get; set; }
+
+        // ODPAD
         public int? WasteCodeId { get; set; }
         public string? WasteCode { get; set; }
         public string? WasteCodeDescription { get; set; }
-
-        // wszystkie trzy masy — nie usuwaj/nazwij inaczej
-        public decimal? WasteMass { get; set; }             // aktualna masa (w JSON: wasteMass)
-        public decimal? CorrectedWasteMass { get; set; }    // masa po korekcie (correctedWasteMass)
-        public decimal? RevisedWasteMass { get; set; }      // masa przed korekt¹ (revisedWasteMass)
-
-        public int? RevisedWasteCodeId { get; set; }
         public bool? WasteCodeExtended { get; set; }
-        public string? WasteCodeExtendedDescription { get; set; }
-        public bool? IsWasteGenerating { get; set; }
-        public string? WasteGeneratingAdditionalInfo { get; set; }
-        public string? WasteGeneratedTerytPk { get; set; }
-        public int? WasteProcessId { get; set; }
 
-        // Revisions/meta
-        public bool? IsRevised { get; set; }
-        public DateTime? RevisedAt { get; set; }
-        public string? RevisedBy { get; set; }
+        // =========================================================
+        // ====================== MASY / DATY ======================
+        // =========================================================
 
-        // Dates / users
-        public DateTime? PlannedTransportTime { get; set; }
-        public DateTime? RealTransportTime { get; set; }
-        public DateTime? ReceiveConfirmationTime { get; set; }
-        public DateTime? TransportConfirmationTime { get; set; }
-        public DateTime? CardApprovalTime { get; set; }
-        public DateTime? CardRejectionTime { get; set; }
-        public DateTime? GeneratingConfirmationTime { get; set; }
+        // LIST
+        public decimal? List_WasteMass { get; set; }
+        public DateTime? List_PlannedTransportTime { get; set; }
+        public DateTime? List_RealTransportTime { get; set; }
+        public DateTime? List_ReceiveConfirmationTime { get; set; }
 
-        public string? ApprovalUser { get; set; }
-        public string? TransportConfirmationUser { get; set; }
-        public string? GeneratingConfirmationUser { get; set; }
-        public string? ReceiveConfirmationUser { get; set; }
-        public string? RejectedByUser { get; set; }
+        // DETAILS
+        public decimal? Details_WasteMass { get; set; }
+        public decimal? Details_RevisedWasteMass { get; set; }
+        public decimal? Details_CorrectedWasteMass { get; set; }
 
-        public string? VehicleRegNumber { get; set; }
-        public string? CertificateNumberAndBoxNumbers { get; set; }
-        public string? AdditionalInfo { get; set; }
-        public bool? HazardousWasteReclassification { get; set; }
-        public string? HazardousWasteReclassificationDescription { get; set; }
-        public string? Remarks { get; set; }
+        public DateTime? Details_PlannedTransportTime { get; set; }
+        public DateTime? Details_RealTransportTime { get; set; }
+        public DateTime? Details_ReceiveConfirmationTime { get; set; }
+        public DateTime? Details_TransportConfirmationTime { get; set; }
+        public DateTime? Details_CardApprovalTime { get; set; }
+        public DateTime? Details_CardRejectionTime { get; set; }
 
-        // Metadata / address
-        public string? CreatedBy { get; set; }
-        public DateTime CreatedDate { get; set; }
-        public string? IdentificationNumber { get; set; }
-        public string? Nip { get; set; }
-        public string? AddressHtml { get; set; }
-        public string? PostalCode { get; set; }
-        public string? CountryName { get; set; }
-        public string? Locality { get; set; }
-        public string? Street { get; set; }
-        public string? BuildingNumber { get; set; }
-        public string? LocalNumber { get; set; }
-        public string? AdditionalInfoForUi { get; set; }
+        // =========================================================
+        // ======================= EFFECTIVE =======================
+        // =========================================================
 
-        // G³ówna kolumna masy widoczna w gridzie; mapowanie ustawiane w FormGlowne
-        public decimal Quantity { get; set; }
-
-        public KpoReceiverFullDetailsDto() { }
+        public decimal? Effective_WasteMass { get; set; }
+        public DateTime? Effective_TransportTime { get; set; }
+        public bool Effective_IsCorrected { get; set; }
     }
 }

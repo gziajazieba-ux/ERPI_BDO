@@ -5,104 +5,243 @@ namespace ERPI_BDO.OpenApi.WasteRegister.Models
 {
     public class KpoDetailsDto
     {
-        // --- Podstawowe informacje o karcie ---
-        [JsonPropertyName("kpoId")] public Guid KpoId { get; set; }
-        [JsonPropertyName("cardNumber")] public string? CardNumber { get; set; }
-        [JsonPropertyName("year")] public int? Year { get; set; }
-        [JsonPropertyName("isRevised")] public bool? IsRevised { get; set; }
+        // =========================================================
+        // IDENTYFIKACJA
+        // =========================================================
 
-        // --- Statusy ---
-        [JsonPropertyName("cardStatusId")] public int? CardStatusId { get; set; }
-        [JsonPropertyName("cardStatus")] public string? CardStatus { get; set; }
-        [JsonPropertyName("cardStatusCodeName")] public string? CardStatusCodeName { get; set; }
+        [JsonPropertyName("kpoId")]
+        public Guid KpoId { get; set; }
 
-        // --- Nadawca (Sender) ---
-        [JsonPropertyName("senderCompanyId")] public Guid? SenderCompanyId { get; set; }
-        [JsonPropertyName("senderEupId")] public Guid? SenderEupId { get; set; }
-        [JsonPropertyName("senderName")] public string? SenderName { get; set; }
-        [JsonPropertyName("senderCompanyName")] public string? SenderCompanyName { get; set; }
-        [JsonPropertyName("senderFirstNameAndLastName")] public string? SenderFirstNameAndLastName { get; set; }
-        [JsonPropertyName("senderAddress")] public string? SenderAddress { get; set; }
-        [JsonPropertyName("senderIdentificationNumber")] public string? SenderIdentificationNumber { get; set; }
-        [JsonPropertyName("senderNip")] public string? SenderNip { get; set; }
-        [JsonPropertyName("senderNipEu")] public string? SenderNipEu { get; set; }
-        [JsonPropertyName("senderEupNumber")] public string? SenderEupNumber { get; set; }
-        [JsonPropertyName("senderEupName")] public string? SenderEupName { get; set; }
-        [JsonPropertyName("senderEupAddress")] public string? SenderEupAddress { get; set; }
+        [JsonPropertyName("year")]
+        public int? Year { get; set; }
 
-        // --- Odbiorca (Receiver) ---
-        [JsonPropertyName("receiverCompanyId")] public Guid? ReceiverCompanyId { get; set; }
-        [JsonPropertyName("receiverEupId")] public Guid? ReceiverEupId { get; set; }
-        [JsonPropertyName("receiverName")] public string? ReceiverName { get; set; }
-        [JsonPropertyName("receiverCompanyName")] public string? ReceiverCompanyName { get; set; }
-        [JsonPropertyName("receiverFirstNameAndLastName")] public string? ReceiverFirstNameAndLastName { get; set; }
-        [JsonPropertyName("receiverAddress")] public string? ReceiverAddress { get; set; }
-        [JsonPropertyName("receiverIdentificationNumber")] public string? ReceiverIdentificationNumber { get; set; }
-        [JsonPropertyName("receiverNip")] public string? ReceiverNip { get; set; }
-        [JsonPropertyName("receiverNipEu")] public string? ReceiverNipEu { get; set; }
-        [JsonPropertyName("receiverEupNumber")] public string? ReceiverEupNumber { get; set; }
-        [JsonPropertyName("receiverEupName")] public string? ReceiverEupName { get; set; }
-        [JsonPropertyName("receiverEupAddress")] public string? ReceiverEupAddress { get; set; }
+        [JsonPropertyName("cardNumber")]
+        public string? CardNumber { get; set; }
 
-        // --- Transportuj¹cy (Carrier) ---
-        [JsonPropertyName("carrierCompanyId")] public Guid? CarrierCompanyId { get; set; }
-        [JsonPropertyName("carrierName")] public string? CarrierName { get; set; }
-        [JsonPropertyName("carrierCompanyName")] public string? CarrierCompanyName { get; set; }
-        [JsonPropertyName("carrierFirstNameAndLastName")] public string? CarrierFirstNameAndLastName { get; set; }
-        [JsonPropertyName("carrierAddress")] public string? CarrierAddress { get; set; }
-        [JsonPropertyName("carrierIdentificationNumber")] public string? CarrierIdentificationNumber { get; set; }
-        [JsonPropertyName("carrierNip")] public string? CarrierNip { get; set; }
-        [JsonPropertyName("carrierNipEu")] public string? CarrierNipEu { get; set; }
+        // =========================================================
+        // STATUS
+        // =========================================================
 
-        // --- Dane o odpadach ---
-        [JsonPropertyName("wasteCodeId")] public int? WasteCodeId { get; set; }
-        [JsonPropertyName("wasteCode")] public string? WasteCode { get; set; }
-        [JsonPropertyName("wasteCodeAndDescription")] public string? WasteCodeAndDescription { get; set; }
-        [JsonPropertyName("wasteMass")] public decimal? WasteMass { get; set; }
-        [JsonPropertyName("wasteProcessId")] public int? WasteProcessId { get; set; }
-        [JsonPropertyName("wasteProcess")] public string? WasteProcess { get; set; }
-        [JsonPropertyName("wasteProcessWithCode")] public string? WasteProcessWithCode { get; set; }
+        [JsonPropertyName("cardStatusId")]
+        public int? CardStatusId { get; set; }
 
-        // --- Transport i Logistyka ---
-        [JsonPropertyName("vehicleRegNumber")] public string? VehicleRegNumber { get; set; }
-        [JsonPropertyName("realTransportDate")] public string? RealTransportDate { get; set; }
-        [JsonPropertyName("realTransportTime")] public string? RealTransportTime { get; set; }
-        [JsonPropertyName("plannedTransportTime")] public DateTime? PlannedTransportTime { get; set; }
+        [JsonPropertyName("cardStatus")]
+        public string? CardStatus { get; set; }
 
-        // --- Potwierdzenia i Zatwierdzenia ---
-        [JsonPropertyName("approvalDate")] public string? ApprovalDate { get; set; }
-        [JsonPropertyName("approvalTime")] public string? ApprovalTime { get; set; }
-        [JsonPropertyName("approvedByUser")] public string? ApprovedByUser { get; set; }
+        [JsonPropertyName("cardStatusCodeName")]
+        public string? CardStatusCodeName { get; set; }
 
-        [JsonPropertyName("receiveConfirmationDate")] public string? ReceiveConfirmationDate { get; set; }
-        [JsonPropertyName("receiveConfirmationTime")] public string? ReceiveConfirmationTime { get; set; }
-        [JsonPropertyName("receiveConfirmedByUser")] public string? ReceiveConfirmedByUser { get; set; }
+        // =========================================================
+        // SENDER
+        // =========================================================
 
-        [JsonPropertyName("rejectedByUser")] public string? RejectedByUser { get; set; }
+        [JsonPropertyName("senderCompanyId")]
+        public Guid? SenderCompanyId { get; set; }
 
-        // --- Informacje Dodatkowe i Reasygnacja ---
-        [JsonPropertyName("hazardousWasteReclassification")] public bool? HazardousWasteReclassification { get; set; }
-        [JsonPropertyName("hazardousWasteReclassificationDescription")] public string? HazardousWasteReclassificationDescription { get; set; }
-        [JsonPropertyName("wasteCodeExtended")] public bool? WasteCodeExtended { get; set; }
-        [JsonPropertyName("wasteCodeExtendedDescription")] public string? WasteCodeExtendedDescription { get; set; }
-        [JsonPropertyName("isWasteGenerating")] public bool? IsWasteGenerating { get; set; }
-        [JsonPropertyName("wasteGeneratedTerytPk")] public string? WasteGeneratedTerytPk { get; set; }
-        [JsonPropertyName("wasteGeneratingAdditionalInfo")] public string? WasteGeneratingAdditionalInfo { get; set; }
+        [JsonPropertyName("senderEupId")]
+        public Guid? SenderEupId { get; set; }
 
-        [JsonPropertyName("certificateNumberAndBoxNumbers")] public string? CertificateNumberAndBoxNumbers { get; set; }
-        [JsonPropertyName("certificateNumber")] public string? CertificateNumber { get; set; }
-        [JsonPropertyName("additionalInfo")] public string? AdditionalInfo { get; set; }
-        [JsonPropertyName("remarks")] public string? Remarks { get; set; }
+        [JsonPropertyName("senderCompanyName")]
+        public string? SenderCompanyName { get; set; }
 
-        // --- Dane adresowe (Metadane/Szczegó³owe) ---
-        [JsonPropertyName("identificationNumber")] public string? IdentificationNumber { get; set; }
-        [JsonPropertyName("nip")] public string? Nip { get; set; }
-        [JsonPropertyName("addressHtml")] public string? AddressHtml { get; set; }
-        [JsonPropertyName("postalCode")] public string? PostalCode { get; set; }
-        [JsonPropertyName("countryName")] public string? CountryName { get; set; }
-        [JsonPropertyName("locality")] public string? Locality { get; set; }
-        [JsonPropertyName("street")] public string? Street { get; set; }
-        [JsonPropertyName("buildingNumber")] public string? BuildingNumber { get; set; }
-        [JsonPropertyName("localNumber")] public string? LocalNumber { get; set; }
+        [JsonPropertyName("senderFirstNameAndLastName")]
+        public string? SenderFirstNameAndLastName { get; set; }
+
+        [JsonPropertyName("senderName")]
+        public string? SenderName { get; set; }
+
+        [JsonPropertyName("senderIdentificationNumber")]
+        public string? SenderIdentificationNumber { get; set; }
+
+        [JsonPropertyName("senderNip")]
+        public string? SenderNip { get; set; }
+
+        // =========================================================
+        // RECEIVER
+        // =========================================================
+
+        [JsonPropertyName("receiverCompanyId")]
+        public Guid? ReceiverCompanyId { get; set; }
+
+        [JsonPropertyName("receiverEupId")]
+        public Guid? ReceiverEupId { get; set; }
+
+        [JsonPropertyName("receiverCompanyName")]
+        public string? ReceiverCompanyName { get; set; }
+
+        [JsonPropertyName("receiverFirstNameAndLastName")]
+        public string? ReceiverFirstNameAndLastName { get; set; }
+
+        [JsonPropertyName("receiverName")]
+        public string? ReceiverName { get; set; }
+
+        [JsonPropertyName("receiverIdentificationNumber")]
+        public string? ReceiverIdentificationNumber { get; set; }
+
+        [JsonPropertyName("receiverNip")]
+        public string? ReceiverNip { get; set; }
+
+        // =========================================================
+        // CARRIER (TRANSPORTUJ¥CY) – ROZSZERZONE
+        // =========================================================
+
+        [JsonPropertyName("carrierCompanyId")]
+        public Guid? CarrierCompanyId { get; set; }
+
+        [JsonPropertyName("carrierEupId")]
+        public Guid? CarrierEupId { get; set; }
+
+        [JsonPropertyName("carrierCompanyName")]
+        public string? CarrierCompanyName { get; set; }
+
+        [JsonPropertyName("vehicleRegNumber")]
+        public string? VehicleRegNumber { get; set; }
+
+        // --- KLUCZOWE BRAKUJ¥CE POLA ---
+        // (BDO zwraca je w company{} dla CompanyType = Carrier)
+
+        public string? IdentificationNumber { get; set; }   // numer rejestrowy BDO
+        public string? Nip { get; set; }
+        public string? EuNip { get; set; }
+        public string? RegistrationNumber { get; set; }
+
+        // =========================================================
+        // ODPAD
+        // =========================================================
+
+        [JsonPropertyName("wasteCodeId")]
+        public int? WasteCodeId { get; set; }
+
+        [JsonPropertyName("wasteCode")]
+        public string? WasteCode { get; set; }
+
+        [JsonPropertyName("wasteCodeDescription")]
+        public string? WasteCodeDescription { get; set; }
+
+        [JsonPropertyName("wasteCodeExtended")]
+        public bool? WasteCodeExtended { get; set; }
+
+        [JsonPropertyName("wasteCodeExtendedDescription")]
+        public string? WasteCodeExtendedDescription { get; set; }
+
+        [JsonPropertyName("hazardousWasteReclassification")]
+        public bool? HazardousWasteReclassification { get; set; }
+
+        [JsonPropertyName("hazardousWasteReclassificationDescription")]
+        public string? HazardousWasteReclassificationDescription { get; set; }
+
+        // =========================================================
+        // MASY
+        // =========================================================
+
+        [JsonPropertyName("wasteMass")]
+        public decimal? WasteMass { get; set; }
+
+        [JsonPropertyName("revisedWasteMass")]
+        public decimal? RevisedWasteMass { get; set; }
+
+        [JsonPropertyName("correctedWasteMass")]
+        public decimal? CorrectedWasteMass { get; set; }
+
+        // =========================================================
+        // DATY / CZASY
+        // =========================================================
+
+        [JsonPropertyName("plannedTransportTime")]
+        public DateTime? PlannedTransportTime { get; set; }
+
+        [JsonPropertyName("realTransportTime")]
+        public DateTime? RealTransportTime { get; set; }
+
+        [JsonPropertyName("receiveConfirmationTime")]
+        public DateTime? ReceiveConfirmationTime { get; set; }
+
+        [JsonPropertyName("transportConfirmationTime")]
+        public DateTime? TransportConfirmationTime { get; set; }
+
+        [JsonPropertyName("cardApprovalTime")]
+        public DateTime? CardApprovalTime { get; set; }
+
+        [JsonPropertyName("cardRejectionTime")]
+        public DateTime? CardRejectionTime { get; set; }
+
+        // =========================================================
+        // WYTWARZANIE ODPADU
+        // =========================================================
+
+        [JsonPropertyName("isWasteGenerating")]
+        public bool? IsWasteGenerating { get; set; }
+
+        [JsonPropertyName("wasteGeneratedTeryt")]
+        public string? WasteGeneratedTeryt { get; set; }
+
+        [JsonPropertyName("wasteGeneratedTerytPk")]
+        public string? WasteGeneratedTerytPk { get; set; }
+
+        [JsonPropertyName("wasteGeneratingAdditionalInfo")]
+        public string? WasteGeneratingAdditionalInfo { get; set; }
+
+        // =========================================================
+        // ADRES / KRAJ
+        // =========================================================
+
+        [JsonPropertyName("addressHtml")]
+        public string? AddressHtml { get; set; }
+
+        [JsonPropertyName("terytPk")]
+        public string? TerytPk { get; set; }
+
+        [JsonPropertyName("postalCode")]
+        public string? PostalCode { get; set; }
+
+        [JsonPropertyName("locality")]
+        public string? Locality { get; set; }
+
+        [JsonPropertyName("street")]
+        public string? Street { get; set; }
+
+        [JsonPropertyName("buildingNumber")]
+        public string? BuildingNumber { get; set; }
+
+        [JsonPropertyName("localNumber")]
+        public string? LocalNumber { get; set; }
+
+        [JsonPropertyName("hasNoBuildingNumber")]
+        public bool? HasNoBuildingNumber { get; set; }
+
+        [JsonPropertyName("foreignCompany")]
+        public bool? ForeignCompany { get; set; }
+
+        [JsonPropertyName("countryId")]
+        public int? CountryId { get; set; }
+
+        [JsonPropertyName("countryName")]
+        public string? CountryName { get; set; }
+
+        // =========================================================
+        // REWIZJE / ODRZUCENIA
+        // =========================================================
+
+        [JsonPropertyName("isRevised")]
+        public bool? IsRevised { get; set; }
+
+        [JsonPropertyName("revisedAt")]
+        public DateTime? RevisedAt { get; set; }
+
+        [JsonPropertyName("revisedBy")]
+        public string? RevisedBy { get; set; }
+
+        [JsonPropertyName("rejectedByUser")]
+        public string? RejectedByUser { get; set; }
+
+        // =========================================================
+        // DODATKOWE
+        // =========================================================
+
+        [JsonPropertyName("remarks")]
+        public string? Remarks { get; set; }
+
+        [JsonPropertyName("additionalInfo")]
+        public string? AdditionalInfo { get; set; }
     }
 }
