@@ -1,14 +1,14 @@
 ### MAPA PROJEKTU AI ###
 Repo: https://github.com/gziajazieba-ux/ERPI_BDO
 Gałąź: master
-Ostatnia aktualizacja: 2026-01-03 12:09:05 UTC | 2026-01-03 13:09:05 CET
-Commit HEAD: 7ad11c8
+Ostatnia aktualizacja: 2026-01-03 17:30:37 UTC | 2026-01-03 18:30:37 CET
+Commit HEAD: 05ddc77
 --------------------------------------------------
 
 [PLIK]
 Ścieżka repo: /.gitattributes
 Rozmiar (B): 2518
-Ostatnia modyfikacja pliku: 2026-01-03 12:09:05
+Ostatnia modyfikacja pliku: 2026-01-03 17:30:37
 Hash (SHA1): 2c1741fb1014d41275cf6193f806ae86cc951f25
 Ostatni commit pliku: f7cdb52
 Link GitHub: https://github.com/gziajazieba-ux/ERPI_BDO/blob/master/.gitattributes
@@ -53,7 +53,7 @@ Wyciąg (pierwsze 30 linii):
 [PLIK]
 Ścieżka repo: /.gitignore
 Rozmiar (B): 6328
-Ostatnia modyfikacja pliku: 2026-01-03 12:09:05
+Ostatnia modyfikacja pliku: 2026-01-03 17:30:37
 Hash (SHA1): 9e97accbb1513288da6f5f5c20158e13daaf02d0
 Ostatni commit pliku: f7cdb52
 Link GitHub: https://github.com/gziajazieba-ux/ERPI_BDO/blob/master/.gitignore
@@ -98,7 +98,7 @@ bld/
 [PLIK]
 Ścieżka repo: /ERPI_BDO.sln
 Rozmiar (B): 1111
-Ostatnia modyfikacja pliku: 2026-01-03 12:09:05
+Ostatnia modyfikacja pliku: 2026-01-03 17:30:37
 Hash (SHA1): 257e250dd9c216408ea7c8ba466fbc33a1bc750d
 Ostatni commit pliku: f7cdb52
 Link GitHub: https://github.com/gziajazieba-ux/ERPI_BDO/blob/master/ERPI_BDO.sln
@@ -138,7 +138,7 @@ EndGlobal
 [PLIK]
 Ścieżka repo: /ERPI_BDO/API/BdoApiClient.cs
 Rozmiar (B): 885
-Ostatnia modyfikacja pliku: 2026-01-03 12:09:05
+Ostatnia modyfikacja pliku: 2026-01-03 17:30:37
 Hash (SHA1): 4a0beb40364ec26908e4aeedb224bcda27833b7f
 Ostatni commit pliku: f7cdb52
 Link GitHub: https://github.com/gziajazieba-ux/ERPI_BDO/blob/master/ERPI_BDO/API/BdoApiClient.cs
@@ -183,7 +183,7 @@ public class BdoApiClient
 [PLIK]
 Ścieżka repo: /ERPI_BDO/API/BdoAuthService.cs
 Rozmiar (B): 4053
-Ostatnia modyfikacja pliku: 2026-01-03 12:09:05
+Ostatnia modyfikacja pliku: 2026-01-03 17:30:37
 Hash (SHA1): 0cf03096de7aee53c77ec03bb842a088b17af8d8
 Ostatni commit pliku: f7cdb52
 Link GitHub: https://github.com/gziajazieba-ux/ERPI_BDO/blob/master/ERPI_BDO/API/BdoAuthService.cs
@@ -228,7 +228,7 @@ public class BdoAuthService
 [PLIK]
 Ścieżka repo: /ERPI_BDO/API/BdoEnvironment.cs
 Rozmiar (B): 83
-Ostatnia modyfikacja pliku: 2026-01-03 12:09:05
+Ostatnia modyfikacja pliku: 2026-01-03 17:30:37
 Hash (SHA1): 43799b64af9c7432a33fc5c61a3fe8095c0425fd
 Ostatni commit pliku: f7cdb52
 Link GitHub: https://github.com/gziajazieba-ux/ERPI_BDO/blob/master/ERPI_BDO/API/BdoEnvironment.cs
@@ -249,7 +249,7 @@ public enum BdoEnvironment
 [PLIK]
 Ścieżka repo: /ERPI_BDO/API/BdoEupContext.cs
 Rozmiar (B): 295
-Ostatnia modyfikacja pliku: 2026-01-03 12:09:05
+Ostatnia modyfikacja pliku: 2026-01-03 17:30:37
 Hash (SHA1): 9907503789f11a1fdcc13a3de6d48d1079561017
 Ostatni commit pliku: f7cdb52
 Link GitHub: https://github.com/gziajazieba-ux/ERPI_BDO/blob/master/ERPI_BDO/API/BdoEupContext.cs
@@ -276,7 +276,7 @@ public class BdoEupContext
 [PLIK]
 Ścieżka repo: /ERPI_BDO/API/BdoEupService.cs
 Rozmiar (B): 1394
-Ostatnia modyfikacja pliku: 2026-01-03 12:09:05
+Ostatnia modyfikacja pliku: 2026-01-03 17:30:37
 Hash (SHA1): 81d1fb5486afdfcfa1b029df7320639ea6b65d13
 Ostatni commit pliku: f7cdb52
 Link GitHub: https://github.com/gziajazieba-ux/ERPI_BDO/blob/master/ERPI_BDO/API/BdoEupService.cs
@@ -321,7 +321,7 @@ namespace ERPI_BDO.Api
 [PLIK]
 Ścieżka repo: /ERPI_BDO/API/BdoPortalSession.cs
 Rozmiar (B): 4826
-Ostatnia modyfikacja pliku: 2026-01-03 12:09:05
+Ostatnia modyfikacja pliku: 2026-01-03 17:30:37
 Hash (SHA1): c1396e63a8530c00fc46eaaaa3e50b8ebbbded31
 Ostatni commit pliku: f7cdb52
 Link GitHub: https://github.com/gziajazieba-ux/ERPI_BDO/blob/master/ERPI_BDO/API/BdoPortalSession.cs
@@ -366,7 +366,7 @@ namespace ERPI_BDO.Portal
 [PLIK]
 Ścieżka repo: /ERPI_BDO/API/BdoTokenResponse.cs
 Rozmiar (B): 356
-Ostatnia modyfikacja pliku: 2026-01-03 12:09:05
+Ostatnia modyfikacja pliku: 2026-01-03 17:30:37
 Hash (SHA1): cda53a05990a137cf6e57201a6f3a6cb0d57ea0c
 Ostatni commit pliku: f7cdb52
 Link GitHub: https://github.com/gziajazieba-ux/ERPI_BDO/blob/master/ERPI_BDO/API/BdoTokenResponse.cs
@@ -395,10 +395,10 @@ public class BdoTokenResponse
 
 [PLIK]
 Ścieżka repo: /ERPI_BDO/API/BdoWasteRegisterService.cs
-Rozmiar (B): 9609
-Ostatnia modyfikacja pliku: 2026-01-03 12:09:05
-Hash (SHA1): 5adebcf00d10fb4b268780b517fb9145fcf1216b
-Ostatni commit pliku: f7cdb52
+Rozmiar (B): 7007
+Ostatnia modyfikacja pliku: 2026-01-03 17:30:37
+Hash (SHA1): e4b7f540100e8adc3fdd7c186777fce4af88428c
+Ostatni commit pliku: 5bfa98a
 Link GitHub: https://github.com/gziajazieba-ux/ERPI_BDO/blob/master/ERPI_BDO/API/BdoWasteRegisterService.cs
 Link RAW: https://raw.githubusercontent.com/gziajazieba-ux/ERPI_BDO/master/ERPI_BDO/API/BdoWasteRegisterService.cs
 
@@ -407,11 +407,9 @@ Wyciąg (pierwsze 30 linii):
 ﻿using System;
 using System.Collections.Generic;
 using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Text.Json;
 using System.Threading.Tasks;
 using ERPI_BDO.OpenApi.WasteRegister;
-
 using ERPI_BDO.Models;
 using ERPI_BDO.OpenApi.WasteRegister.Models;
 
@@ -430,10 +428,12 @@ namespace ERPI_BDO.Api
             _client = new WasteRegisterApiClient(httpClient);
         }
 
+        // =========================================================
+        // TOKEN EUP
+        // =========================================================
 
         public async Task<string> GetEupTokenAsync(string eupId)
         {
-            try
 """
 
 --------------------------------------------------
@@ -441,7 +441,7 @@ namespace ERPI_BDO.Api
 [PLIK]
 Ścieżka repo: /ERPI_BDO/API/DebugLogger.cs
 Rozmiar (B): 388
-Ostatnia modyfikacja pliku: 2026-01-03 12:09:05
+Ostatnia modyfikacja pliku: 2026-01-03 17:30:37
 Hash (SHA1): 275a1a0c3d7115698c29edcaa14c061f16ae06e5
 Ostatni commit pliku: f7cdb52
 Link GitHub: https://github.com/gziajazieba-ux/ERPI_BDO/blob/master/ERPI_BDO/API/DebugLogger.cs
@@ -477,7 +477,7 @@ public static class DebugLogger
 [PLIK]
 Ścieżka repo: /ERPI_BDO/API/KpoModels.cs
 Rozmiar (B): 1475
-Ostatnia modyfikacja pliku: 2026-01-03 12:09:05
+Ostatnia modyfikacja pliku: 2026-01-03 17:30:37
 Hash (SHA1): e02297b3675b4eb426ac9d1356464ade03b6697c
 Ostatni commit pliku: f7cdb52
 Link GitHub: https://github.com/gziajazieba-ux/ERPI_BDO/blob/master/ERPI_BDO/API/KpoModels.cs
@@ -521,10 +521,10 @@ public class KpoItem
 
 [PLIK]
 Ścieżka repo: /ERPI_BDO/API/KpoReceiverFullDetailsDto.cs
-Rozmiar (B): 4147
-Ostatnia modyfikacja pliku: 2026-01-03 12:09:05
-Hash (SHA1): 343f2214753a826c046ec3498a0c99fcf8efcaad
-Ostatni commit pliku: f7cdb52
+Rozmiar (B): 7848
+Ostatnia modyfikacja pliku: 2026-01-03 17:30:37
+Hash (SHA1): cae8c88db5ed683ba16ed4a737a047a7520369c6
+Ostatni commit pliku: 5bfa98a
 Link GitHub: https://github.com/gziajazieba-ux/ERPI_BDO/blob/master/ERPI_BDO/API/KpoReceiverFullDetailsDto.cs
 Link RAW: https://raw.githubusercontent.com/gziajazieba-ux/ERPI_BDO/master/ERPI_BDO/API/KpoReceiverFullDetailsDto.cs
 
@@ -536,30 +536,30 @@ namespace ERPI_BDO.Api
 {
     public class KpoReceiverFullDetailsDto
     {
+        // =========================================================
+        // IDENTYFIKACJA KARTY (WSP�LNA)
+        // =========================================================
+
         public Guid KpoId { get; set; }
         public int? Year { get; set; }
         public string? CardNumber { get; set; }
-        public string? CardStatus { get; set; }
-        public int? CardStatusId { get; set; }
-        public string? CardStatusCodeName { get; set; }
 
-        // Sender
-        public Guid? SenderCompanyId { get; set; }
-        public Guid? SenderEupId { get; set; }
-        public string? SenderCompanyName { get; set; }
-        public string? SenderFirstNameAndLastName { get; set; }
-        public string? SenderName { get; set; }
+        // =========================================================
+        // ======================= SENDER ==========================
+        // =========================================================
 
-        // Receiver
-        public Guid? ReceiverCompanyId { get; set; }
-        public Guid? ReceiverEupId { get; set; }
-        public string? ReceiverCompanyName { get; set; }
-        public string? ReceiverFirstAndLastName { get; set; }
-        public string? ReceiverName { get; set; }
+        // ---------- LIST ----------
+        public Guid? Sender_List_CompanyId { get; set; }
+        public Guid? Sender_List_EupId { get; set; }
+        public string? Sender_List_CompanyName { get; set; }
+        public string? Sender_List_Name { get; set; }
+        public string? Sender_List_FirstNameAndLastName { get; set; }
 
-        // Carrier
-        public Guid? CarrierCompanyId { get; set; }
-        public Guid? CarrierEupId { get; set; }
+        // ---------- DETAILS ----------
+        public Guid? Sender_Details_CompanyId { get; set; }
+        public Guid? Sender_Details_EupId { get; set; }
+        public string? Sender_Details_CompanyName { get; set; }
+        public string? Sender_Details_Name { get; set; }
 """
 
 --------------------------------------------------
@@ -567,7 +567,7 @@ namespace ERPI_BDO.Api
 [PLIK]
 Ścieżka repo: /ERPI_BDO/API/KpoReceiverListResponseDto.cs
 Rozmiar (B): 214
-Ostatnia modyfikacja pliku: 2026-01-03 12:09:05
+Ostatnia modyfikacja pliku: 2026-01-03 17:30:37
 Hash (SHA1): 1b09f69b0472626d41b45768a856831206c0d2df
 Ostatni commit pliku: f7cdb52
 Link GitHub: https://github.com/gziajazieba-ux/ERPI_BDO/blob/master/ERPI_BDO/API/KpoReceiverListResponseDto.cs
@@ -590,7 +590,7 @@ public class KpoReceiverListResponseDto
 [PLIK]
 Ścieżka repo: /ERPI_BDO/ERPI_BDO.csproj
 Rozmiar (B): 1695
-Ostatnia modyfikacja pliku: 2026-01-03 12:09:05
+Ostatnia modyfikacja pliku: 2026-01-03 17:30:37
 Hash (SHA1): 13253558ffcf98a0bfd855a3ea6d403f25741aba
 Ostatni commit pliku: f7cdb52
 Link GitHub: https://github.com/gziajazieba-ux/ERPI_BDO/blob/master/ERPI_BDO/ERPI_BDO.csproj
@@ -635,7 +635,7 @@ Wyciąg (pierwsze 30 linii):
 [PLIK]
 Ścieżka repo: /ERPI_BDO/FormDebugText.Designer.cs
 Rozmiar (B): 1310
-Ostatnia modyfikacja pliku: 2026-01-03 12:09:05
+Ostatnia modyfikacja pliku: 2026-01-03 17:30:37
 Hash (SHA1): d4209f71c448a8a96f0a59b896199df6c37e3b60
 Ostatni commit pliku: f7cdb52
 Link GitHub: https://github.com/gziajazieba-ux/ERPI_BDO/blob/master/ERPI_BDO/FormDebugText.Designer.cs
@@ -680,7 +680,7 @@ Wyciąg (pierwsze 30 linii):
 [PLIK]
 Ścieżka repo: /ERPI_BDO/FormDebugText.cs
 Rozmiar (B): 563
-Ostatnia modyfikacja pliku: 2026-01-03 12:09:05
+Ostatnia modyfikacja pliku: 2026-01-03 17:30:37
 Hash (SHA1): 6ca38ff75d5f23923d9a7df84cc3f08bcef6e0cf
 Ostatni commit pliku: f7cdb52
 Link GitHub: https://github.com/gziajazieba-ux/ERPI_BDO/blob/master/ERPI_BDO/FormDebugText.cs
@@ -722,7 +722,7 @@ public partial class FormDebugText : Form
 [PLIK]
 Ścieżka repo: /ERPI_BDO/FormDebugText.resx
 Rozmiar (B): 5629
-Ostatnia modyfikacja pliku: 2026-01-03 12:09:05
+Ostatnia modyfikacja pliku: 2026-01-03 17:30:37
 Hash (SHA1): ffe044bb3ea9e0a274e99363eec2db2478ffda1c
 Ostatni commit pliku: f7cdb52
 Link GitHub: https://github.com/gziajazieba-ux/ERPI_BDO/blob/master/ERPI_BDO/FormDebugText.resx
@@ -767,7 +767,7 @@ Wyciąg (pierwsze 30 linii):
 [PLIK]
 Ścieżka repo: /ERPI_BDO/FormGlowne.Designer.cs
 Rozmiar (B): 18204
-Ostatnia modyfikacja pliku: 2026-01-03 12:09:05
+Ostatnia modyfikacja pliku: 2026-01-03 17:30:37
 Hash (SHA1): 383cafcb04b5a1af97ba9aa39d51971ac207c7a7
 Ostatni commit pliku: f7cdb52
 Link GitHub: https://github.com/gziajazieba-ux/ERPI_BDO/blob/master/ERPI_BDO/FormGlowne.Designer.cs
@@ -811,10 +811,10 @@ Wyciąg (pierwsze 30 linii):
 
 [PLIK]
 Ścieżka repo: /ERPI_BDO/FormGlowne.cs
-Rozmiar (B): 41612
-Ostatnia modyfikacja pliku: 2026-01-03 12:09:05
-Hash (SHA1): 153cb0b8ba07e60bc67462bcfef2796f1eb02c7c
-Ostatni commit pliku: 6e52423
+Rozmiar (B): 47791
+Ostatnia modyfikacja pliku: 2026-01-03 17:30:37
+Hash (SHA1): d7596df0d79ee269f704ff7c5537cd296885034e
+Ostatni commit pliku: 5bfa98a
 Link GitHub: https://github.com/gziajazieba-ux/ERPI_BDO/blob/master/ERPI_BDO/FormGlowne.cs
 Link RAW: https://raw.githubusercontent.com/gziajazieba-ux/ERPI_BDO/master/ERPI_BDO/FormGlowne.cs
 
@@ -825,14 +825,14 @@ using ERPI_BDO.OpenApi.WasteRegister; // Tu nadal trzymamy DTO z NSwag dla listy
 using ERPI_BDO.OpenApi.WasteRegister.Models; // <- DODANE: tu jest KpoDetailsDto
 using ERPI_BDO.Portal;
 using Microsoft.Web.WebView2.Core;
+using System; // dla DateTime itp.
+using System.Collections.Generic; // Dodaj to
+using System.Globalization; // dla parsowania daty/czasu
+using System.Linq; // Dodaj to
 using System.Net;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
-using System.Collections.Generic; // Dodaj to
-using System.Linq; // Dodaj to
-using System; // dla DateTime itp.
-using System.Globalization; // dla parsowania daty/czasu
 using System.Windows.Forms; // używane typy WinForms
 
 namespace ERPI_BDO
@@ -857,7 +857,7 @@ namespace ERPI_BDO
 [PLIK]
 Ścieżka repo: /ERPI_BDO/FormGlowne.resx
 Rozmiar (B): 6022
-Ostatnia modyfikacja pliku: 2026-01-03 12:09:05
+Ostatnia modyfikacja pliku: 2026-01-03 17:30:37
 Hash (SHA1): 8273e89699e107e6536cc42f428b2e445b330679
 Ostatni commit pliku: f7cdb52
 Link GitHub: https://github.com/gziajazieba-ux/ERPI_BDO/blob/master/ERPI_BDO/FormGlowne.resx
@@ -900,9 +900,54 @@ Wyciąg (pierwsze 30 linii):
 --------------------------------------------------
 
 [PLIK]
+Ścieżka repo: /ERPI_BDO/KPO.txt
+Rozmiar (B): 33237
+Ostatnia modyfikacja pliku: 2026-01-03 17:30:37
+Hash (SHA1): 5ee02702b74eb229c8a3c33e603ee44eb5d01971
+Ostatni commit pliku: 5bfa98a
+Link GitHub: https://github.com/gziajazieba-ux/ERPI_BDO/blob/master/ERPI_BDO/KPO.txt
+Link RAW: https://raw.githubusercontent.com/gziajazieba-ux/ERPI_BDO/master/ERPI_BDO/KPO.txt
+
+Wyciąg (pierwsze 30 linii):
+"""
+v1 Waste Register public Api
+ v1 
+OAS3
+/api/swagger/v1/swagger.json
+Servers
+
+/api
+Authorize
+Auth
+
+
+POST
+​/WasteRegister​/v1​/Auth​/getEupList
+
+Parameters
+Try it out
+No parameters
+
+Request body
+
+application/json
+Example Value
+Schema
+{
+  "ClientId": "string",
+  "ClientSecret": "string",
+  "PaginationParameters": {
+    "Order": {
+      "IsAscending": true
+    },
+"""
+
+--------------------------------------------------
+
+[PLIK]
 Ścieżka repo: /ERPI_BDO/OpenAPIs/swagger.json
 Rozmiar (B): 1213384
-Ostatnia modyfikacja pliku: 2026-01-03 12:09:05
+Ostatnia modyfikacja pliku: 2026-01-03 17:30:37
 Hash (SHA1): 33aa9e1bc8fd1250c497e8da63c21a464a91c637
 Ostatni commit pliku: f7cdb52
 Link GitHub: https://github.com/gziajazieba-ux/ERPI_BDO/blob/master/ERPI_BDO/OpenAPIs/swagger.json
@@ -946,10 +991,10 @@ Wyciąg (pierwsze 30 linii):
 
 [PLIK]
 Ścieżka repo: /ERPI_BDO/OpenApi/WasteRegister/Models/KpoDetailsDto.cs
-Rozmiar (B): 7705
-Ostatnia modyfikacja pliku: 2026-01-03 12:09:05
-Hash (SHA1): 3a562eb8b5299e732c0431b7b2174bfc9c5276e5
-Ostatni commit pliku: f7cdb52
+Rozmiar (B): 8588
+Ostatnia modyfikacja pliku: 2026-01-03 17:30:37
+Hash (SHA1): c7fec4b62ec846815763c119526da92f28be97ba
+Ostatni commit pliku: 5bfa98a
 Link GitHub: https://github.com/gziajazieba-ux/ERPI_BDO/blob/master/ERPI_BDO/OpenApi/WasteRegister/Models/KpoDetailsDto.cs
 Link RAW: https://raw.githubusercontent.com/gziajazieba-ux/ERPI_BDO/master/ERPI_BDO/OpenApi/WasteRegister/Models/KpoDetailsDto.cs
 
@@ -962,29 +1007,29 @@ namespace ERPI_BDO.OpenApi.WasteRegister.Models
 {
     public class KpoDetailsDto
     {
-        // --- Podstawowe informacje o karcie ---
-        [JsonPropertyName("kpoId")] public Guid KpoId { get; set; }
-        [JsonPropertyName("cardNumber")] public string? CardNumber { get; set; }
-        [JsonPropertyName("year")] public int? Year { get; set; }
-        [JsonPropertyName("isRevised")] public bool? IsRevised { get; set; }
+        // =========================================================
+        // IDENTYFIKACJA
+        // =========================================================
 
-        // --- Statusy ---
-        [JsonPropertyName("cardStatusId")] public int? CardStatusId { get; set; }
-        [JsonPropertyName("cardStatus")] public string? CardStatus { get; set; }
-        [JsonPropertyName("cardStatusCodeName")] public string? CardStatusCodeName { get; set; }
+        [JsonPropertyName("kpoId")]
+        public Guid KpoId { get; set; }
 
-        // --- Nadawca (Sender) ---
-        [JsonPropertyName("senderCompanyId")] public Guid? SenderCompanyId { get; set; }
-        [JsonPropertyName("senderEupId")] public Guid? SenderEupId { get; set; }
-        [JsonPropertyName("senderName")] public string? SenderName { get; set; }
-        [JsonPropertyName("senderCompanyName")] public string? SenderCompanyName { get; set; }
-        [JsonPropertyName("senderFirstNameAndLastName")] public string? SenderFirstNameAndLastName { get; set; }
-        [JsonPropertyName("senderAddress")] public string? SenderAddress { get; set; }
-        [JsonPropertyName("senderIdentificationNumber")] public string? SenderIdentificationNumber { get; set; }
-        [JsonPropertyName("senderNip")] public string? SenderNip { get; set; }
-        [JsonPropertyName("senderNipEu")] public string? SenderNipEu { get; set; }
-        [JsonPropertyName("senderEupNumber")] public string? SenderEupNumber { get; set; }
-        [JsonPropertyName("senderEupName")] public string? SenderEupName { get; set; }
+        [JsonPropertyName("year")]
+        public int? Year { get; set; }
+
+        [JsonPropertyName("cardNumber")]
+        public string? CardNumber { get; set; }
+
+        // =========================================================
+        // STATUS
+        // =========================================================
+
+        [JsonPropertyName("cardStatusId")]
+        public int? CardStatusId { get; set; }
+
+        [JsonPropertyName("cardStatus")]
+        public string? CardStatus { get; set; }
+
 """
 
 --------------------------------------------------
@@ -992,7 +1037,7 @@ namespace ERPI_BDO.OpenApi.WasteRegister.Models
 [PLIK]
 Ścieżka repo: /ERPI_BDO/OpenApi/WasteRegister/Models/KpoReceiverListItemDto.cs
 Rozmiar (B): 368
-Ostatnia modyfikacja pliku: 2026-01-03 12:09:05
+Ostatnia modyfikacja pliku: 2026-01-03 17:30:37
 Hash (SHA1): bda4a2e3fd8ad8774b394b2c2c114149c57e32a8
 Ostatni commit pliku: f7cdb52
 Link GitHub: https://github.com/gziajazieba-ux/ERPI_BDO/blob/master/ERPI_BDO/OpenApi/WasteRegister/Models/KpoReceiverListItemDto.cs
@@ -1019,7 +1064,7 @@ public class KpoReceiverListItemDto
 [PLIK]
 Ścieżka repo: /ERPI_BDO/Program.cs
 Rozmiar (B): 224
-Ostatnia modyfikacja pliku: 2026-01-03 12:09:05
+Ostatnia modyfikacja pliku: 2026-01-03 17:30:37
 Hash (SHA1): 68b2e39f0444fdc74f378cb4a43dae076c1396fa
 Ostatni commit pliku: f7cdb52
 Link GitHub: https://github.com/gziajazieba-ux/ERPI_BDO/blob/master/ERPI_BDO/Program.cs
@@ -1045,7 +1090,7 @@ namespace ERPI_BDO
 [PLIK]
 Ścieżka repo: /ERPI_BDO/Properties/Resources.Designer.cs
 Rozmiar (B): 3686
-Ostatnia modyfikacja pliku: 2026-01-03 12:09:05
+Ostatnia modyfikacja pliku: 2026-01-03 17:30:37
 Hash (SHA1): cbeabc3898dd9e5ecdb0f76431d2b3d5d9227a66
 Ostatni commit pliku: f7cdb52
 Link GitHub: https://github.com/gziajazieba-ux/ERPI_BDO/blob/master/ERPI_BDO/Properties/Resources.Designer.cs
@@ -1090,7 +1135,7 @@ namespace ERPI_BDO.Properties {
 [PLIK]
 Ścieżka repo: /ERPI_BDO/Properties/Resources.resx
 Rozmiar (B): 6305
-Ostatnia modyfikacja pliku: 2026-01-03 12:09:05
+Ostatnia modyfikacja pliku: 2026-01-03 17:30:37
 Hash (SHA1): db7989864390e2bb1c46922f12b661e33fffe5a1
 Ostatni commit pliku: f7cdb52
 Link GitHub: https://github.com/gziajazieba-ux/ERPI_BDO/blob/master/ERPI_BDO/Properties/Resources.resx
@@ -1135,7 +1180,7 @@ Wyciąg (pierwsze 30 linii):
 [PLIK]
 Ścieżka repo: /ERPI_BDO/Resources/error.png
 Rozmiar (B): 1088
-Ostatnia modyfikacja pliku: 2026-01-03 12:09:05
+Ostatnia modyfikacja pliku: 2026-01-03 17:30:37
 Hash (SHA1): 9ea031b97f52c7682a306b13467df5baf5273137
 Ostatni commit pliku: f7cdb52
 Link GitHub: https://github.com/gziajazieba-ux/ERPI_BDO/blob/master/ERPI_BDO/Resources/error.png
@@ -1159,7 +1204,7 @@ E~��VH��O�G�)�1�\�6����V�� ���
 [PLIK]
 Ścieżka repo: /ERPI_BDO/Resources/ok.png
 Rozmiar (B): 1555
-Ostatnia modyfikacja pliku: 2026-01-03 12:09:05
+Ostatnia modyfikacja pliku: 2026-01-03 17:30:37
 Hash (SHA1): a5a10382a0358c3921fd6a7725d66fc34bc523de
 Ostatni commit pliku: f7cdb52
 Link GitHub: https://github.com/gziajazieba-ux/ERPI_BDO/blob/master/ERPI_BDO/Resources/ok.png
@@ -1179,54 +1224,9 @@ Wyciąg (pierwsze 30 linii):
 --------------------------------------------------
 
 [PLIK]
-Ścieżka repo: /KPO.txt
-Rozmiar (B): 33237
-Ostatnia modyfikacja pliku: 2026-01-03 12:09:05
-Hash (SHA1): 5ee02702b74eb229c8a3c33e603ee44eb5d01971
-Ostatni commit pliku: e34054a
-Link GitHub: https://github.com/gziajazieba-ux/ERPI_BDO/blob/master/KPO.txt
-Link RAW: https://raw.githubusercontent.com/gziajazieba-ux/ERPI_BDO/master/KPO.txt
-
-Wyciąg (pierwsze 30 linii):
-"""
-v1 Waste Register public Api
- v1 
-OAS3
-/api/swagger/v1/swagger.json
-Servers
-
-/api
-Authorize
-Auth
-
-
-POST
-​/WasteRegister​/v1​/Auth​/getEupList
-
-Parameters
-Try it out
-No parameters
-
-Request body
-
-application/json
-Example Value
-Schema
-{
-  "ClientId": "string",
-  "ClientSecret": "string",
-  "PaginationParameters": {
-    "Order": {
-      "IsAscending": true
-    },
-"""
-
---------------------------------------------------
-
-[PLIK]
 Ścieżka repo: /mapa_projektu.txt
 Rozmiar (B): 3000
-Ostatnia modyfikacja pliku: 2026-01-03 12:09:05
+Ostatnia modyfikacja pliku: 2026-01-03 17:30:37
 Hash (SHA1): cdd850053194c5de2d3562bf56a494e87a663412
 Ostatni commit pliku: 3bfdeab
 Link GitHub: https://github.com/gziajazieba-ux/ERPI_BDO/blob/master/mapa_projektu.txt
@@ -1271,7 +1271,7 @@ https://raw.githubusercontent.com/gziajazieba-ux/ERPI_BDO/master/ERPI_BDO/API/Kp
 [PLIK]
 Ścieżka repo: /start.txt
 Rozmiar (B): 1208
-Ostatnia modyfikacja pliku: 2026-01-03 12:09:05
+Ostatnia modyfikacja pliku: 2026-01-03 17:30:37
 Hash (SHA1): 58c55a4a9d694bdc74430b642c69bb5ea5581e7b
 Ostatni commit pliku: fc96123
 Link GitHub: https://github.com/gziajazieba-ux/ERPI_BDO/blob/master/start.txt
