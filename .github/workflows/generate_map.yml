@@ -16,10 +16,13 @@ jobs:
 
       - name: Generate File List
         run: |
+          # Ustawienie czasu na polski
           export TZ="Europe/Warsaw"
+          # Format: RRRRMMDD_GGMMSS (RokMiesiącDzień_GodzinaMinutaSekunda)
           TIMESTAMP=$(date +'%Y%m%d_%H%M%S')
           FILENAME="mapa_projektu_${TIMESTAMP}.txt"
           
+          # Usuwanie wszystkich poprzednich plików mapy
           rm -f mapa_projektu_*.txt
           
           echo "### Mapa plików Raw (Generacja: $(date +'%Y-%m-%d %H:%M:%S')) ###" > $FILENAME
