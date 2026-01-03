@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
+      - name: Checkout repository
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
@@ -31,13 +31,14 @@ jobs:
           RAW_BASE="https://raw.githubusercontent.com/${REPO_FULL}/${BRANCH}"
           BLOB_BASE="https://github.com/${REPO_FULL}/blob/${BRANCH}"
 
+          # ===== CZASY =====
+          UTC_TIME=$(date -u +'%Y-%m-%d %H:%M:%S')
+          PL_TIME=$(TZ=Europe/Warsaw date +'%Y-%m-%d %H:%M:%S')
+
           echo "### MAPA PROJEKTU AI ###" > "$OUTPUT"
           echo "Repo: https://github.com/${REPO_FULL}" >> "$OUTPUT"
           echo "Gałąź: ${BRANCH}" >> "$OUTPUT"
-
-          # 🔥 KLUCZOWA LINIA – ZAWSZE INNA
-          echo "Ostatnia aktualizacja: $(date +'%Y-%m-%d %H:%M:%S')" >> "$OUTPUT"
-
+          echo "Ostatnia aktualizacja: ${UTC_TIME} UTC | ${PL_TIME} CET" >> "$OUTPUT"
           echo "Commit HEAD: $(git rev-parse --short HEAD)" >> "$OUTPUT"
           echo "--------------------------------------------------" >> "$OUTPUT"
           echo "" >> "$OUTPUT"
@@ -76,7 +77,7 @@ jobs:
               echo "" >> "$OUTPUT"
           done
 
-      - name: Commit and Push MAPA_PROJEKTU_AI.txt
+      - name: Commit and push MAPA_PROJEKTU_AI.txt
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
