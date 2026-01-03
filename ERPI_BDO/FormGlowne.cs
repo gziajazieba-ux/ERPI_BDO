@@ -11,6 +11,7 @@ using System.Net;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
+using System.Threading;
 using System.Windows.Forms; // używane typy WinForms
 
 namespace ERPI_BDO
@@ -647,65 +648,84 @@ namespace ERPI_BDO
                 };
 
                 // =====================================================
-                // DETAILS (TYLKO TEN companyType)
+                // DETAILS 3×  (Sender + Carrier + Receiver)
                 // =====================================================
-                var details = await _bdoService.GetKpoDetailsAsync(
+
+                // -------------------- SENDER -------------------------
+                var senderDetails = await _bdoService.GetKpoDetailsAsync(
                     kpoId.Value,
                     eupClient,
-                    companyType,
+                    0, // Sender
                     DebugLogger.Add
                 );
 
-                if (details != null)
+                if (senderDetails != null)
                 {
-                    DebugLogger.Add($"DETAILS OK for {kpoId}");
-
-                    // =================================================
-                    // SENDER DETAILS
-                    // =================================================
-                    dto.Sender_Details_CompanyId = details.SenderCompanyId;
-                    dto.Sender_Details_EupId = details.SenderEupId;
-                    dto.Sender_Details_CompanyName = details.SenderCompanyName;
+                    dto.Sender_Details_CompanyId = senderDetails.SenderCompanyId;
+                    dto.Sender_Details_EupId = senderDetails.SenderEupId;
+                    dto.Sender_Details_CompanyName = senderDetails.SenderCompanyName;
                     dto.Sender_Details_FirstNameAndLastName =
-                        details.SenderFirstNameAndLastName;
+                        senderDetails.SenderFirstNameAndLastName;
                     dto.Sender_Details_IdentificationNumber =
-                        details.SenderIdentificationNumber;
-                    dto.Sender_Details_Nip = details.SenderNip;
-
-                    // =================================================
-                    // RECEIVER DETAILS
-                    // =================================================
-                    dto.Receiver_Details_CompanyId = details.ReceiverCompanyId;
-                    dto.Receiver_Details_EupId = details.ReceiverEupId;
-                    dto.Receiver_Details_CompanyName = details.ReceiverCompanyName;
-                    dto.Receiver_Details_FirstNameAndLastName =
-                        details.ReceiverFirstNameAndLastName;
-                    dto.Receiver_Details_IdentificationNumber =
-                        details.ReceiverIdentificationNumber;
-                    dto.Receiver_Details_Nip = details.ReceiverNip;
-
-                    // =================================================
-                    // CARRIER DETAILS
-                    // =================================================
-                    dto.Carrier_Details_CompanyId = details.CarrierCompanyId;
-                    dto.Carrier_Details_EupId = details.CarrierEupId;
-                    dto.Carrier_Details_CompanyName = details.CarrierCompanyName;
-                    dto.Carrier_Details_IdentificationNumber =
-                        details.IdentificationNumber;
-                    dto.Carrier_Details_Nip = details.Nip;
-                    dto.Carrier_Details_EuNip = details.EuNip;
-                    dto.Carrier_Details_RegistryNumber =
-                        details.RegistrationNumber;
-
-                    // =================================================
-                    // ADRES (DETAILS – wspólny)
-                    // =================================================
-
+                        senderDetails.SenderIdentificationNumber;
+                    dto.Sender_Details_Nip = senderDetails.SenderNip;
                 }
                 else
                 {
-                    DebugLogger.Add($"DETAILS NOT FOUND for {kpoId}");
+                    DebugLogger.Add($"SENDER DETAILS NOT FOUND for {kpoId}");
                 }
+
+                // -------------------- CARRIER ------------------------
+                var carrierDetails = await _bdoService.GetKpoDetailsAsync(
+                    kpoId.Value,
+                    eupClient,
+                    1, // Carrier
+                    DebugLogger.Add
+                );
+
+                if (carrierDetails != null)
+                {
+                    dto.Carrier_Details_CompanyId = carrierDetails.CarrierCompanyId;
+                    dto.Carrier_Details_EupId = carrierDetails.CarrierEupId;
+                    dto.Carrier_Details_CompanyName = carrierDetails.CarrierCompanyName;
+
+                    dto.Carrier_Details_IdentificationNumber =
+                        carrierDetails.IdentificationNumber;
+                    dto.Carrier_Details_Nip = carrierDetails.Nip;
+                    dto.Carrier_Details_EuNip = carrierDetails.EuNip;
+                    dto.Carrier_Details_RegistryNumber =
+                        carrierDetails.RegistrationNumber;
+                }
+                else
+                {
+                    DebugLogger.Add($"CARRIER DETAILS NOT FOUND for {kpoId}");
+                }
+
+                // -------------------- RECEIVER -----------------------
+                var receiverDetails = await _bdoService.GetKpoDetailsAsync(
+                    kpoId.Value,
+                    eupClient,
+                    2, // Receiver
+                    DebugLogger.Add
+                );
+
+                if (receiverDetails != null)
+                {
+                    dto.Receiver_Details_CompanyId = receiverDetails.ReceiverCompanyId;
+                    dto.Receiver_Details_EupId = receiverDetails.ReceiverEupId;
+                    dto.Receiver_Details_CompanyName = receiverDetails.ReceiverCompanyName;
+                    dto.Receiver_Details_FirstNameAndLastName =
+                        receiverDetails.ReceiverFirstNameAndLastName;
+                    dto.Receiver_Details_IdentificationNumber =
+                        receiverDetails.ReceiverIdentificationNumber;
+                    dto.Receiver_Details_Nip = receiverDetails.ReceiverNip;
+                }
+                else
+                {
+                    DebugLogger.Add($"RECEIVER DETAILS NOT FOUND for {kpoId}");
+                }
+
+
 
                 result.Add(dto);
                 DebugLogger.Add($"--- KPO {kpoId} END ---");
