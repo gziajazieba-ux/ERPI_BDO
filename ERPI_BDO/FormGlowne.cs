@@ -14,7 +14,7 @@ using System.Globalization; // dla parsowania daty/czasu
 using System.Windows.Forms; // używane typy WinForms
 
 namespace ERPI_BDO
-{
+{//komentarz
     public partial class FormGlowne : Form
     {
         // POLA (zmienne globalne)

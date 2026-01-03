@@ -6,38 +6,32 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    permissions: # Dodatkowe zabezpieczenie uprawnień wewnątrz skryptu
+    permissions:
       contents: write
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4 # Zaktualizowana wersja akcji
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
       - name: Generate File List
         run: |
-          # Ustawienie czasu na polski
           export TZ="Europe/Warsaw"
-          # Format: RRRRMMDD_GGMMSS (RokMiesiącDzień_GodzinaMinutaSekunda)
-          TIMESTAMP=$(date +'%Y%m%d_%H%M%S')
-          FILENAME="mapa_projektu_${TIMESTAMP}.txt"
+          # Stała nazwa pliku dla porządku
+          FILENAME="mapa_projektu.txt"
           
-          # Usuwanie wszystkich poprzednich plików mapy
-          rm -f mapa_projektu_*.txt
-          
-          echo "### Mapa plików Raw (Generacja: $(date +'%Y-%m-%d %H:%M:%S')) ###" > $FILENAME
+          echo "### Mapa plików Raw ###" > $FILENAME
+          echo "Ostatnia aktualizacja: $(date +'%Y-%m-%d %H:%M:%S')" >> $FILENAME
           echo "----------------------------------------------------------" >> $FILENAME
           
-          # Automatyczne wykrywanie nazwy repozytorium i gałęzi
           REPO_URL="https://raw.githubusercontent.com/${{ github.repository }}/${{ github.ref_name }}"
-          
-          find . -type f -not -path '*/.*' -not -name "mapa_projektu_*.txt" | sed "s|^\./|$REPO_URL/|" >> $FILENAME
+          find . -type f -not -path '*/.*' -not -name "$FILENAME" | sed "s|^\./|$REPO_URL/|" >> $FILENAME
 
       - name: Commit and Push
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git add mapa_projektu_*.txt
-          # Jeśli nie ma zmian, skrypt po prostu skończy bez błędu
-          git commit -m "Auto-update map: $(date +'%H:%M:%S')" || exit 0
+          git add mapa_projektu.txt
+          # Skrypt teraz nadpisuje ten sam plik
+          git commit -m "Auto-update project map" || exit 0
           git push
