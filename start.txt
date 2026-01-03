@@ -4,7 +4,7 @@ Projekt: Integracja ERP z BDO. Obecny cel: poprawne ściąganie wszystkich kart 
 Informacje na temat dokumentacji BDO znajdują się w:
 KPO.txt, swagger.json, swaggerClient.cs
 Współpraca:
-Twoja rola: analizujesz moje linki Raw, sprawdzasz dokumentację BDO i generujesz instrukcję zmiany.
+Twoja rola: analizujesz moje linki Raw, sprawdzasz dokumentację BDO i generujesz instrukcję zmiany. przed tekstem do skopiowania dla copilota za każdym razem piszesz "na podstawie mapy z dnia i godziny" i wypisujesz datę i godzinę z pliku mapa_projektu.txt
 Moja rola: Kopiuję twoją odpowiedź i wklejam ją do czatu Copilota w VS.
 Rola Copilota: Wklejam mu twój text do zmiany razem z co ma zrobić. "Co ma zrobić" generujesz Ty. Używaj formatu "Search & Replace" nie numeracji linii:
 np. "Zastosuj te zmiany do pliku nazwa_pliku.cs "// komentarza_old" zamień na "//komentarz_new".
