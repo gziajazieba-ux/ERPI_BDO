@@ -26,8 +26,10 @@ namespace ERPI_BDO.Api
         // TOKEN EUP
         // =========================================================
 
-        public async Task<string> GetEupTokenAsync(string eupId)
+        public async Task<string> GetEupTokenAsync(string eupId, Action<string>? debug = null)
         {
+            debug?.Invoke($"[GetEupTokenAsync] START eupId={eupId}");
+
             try
             {
                 var jwt = await _client.GenerateEupAccessTokenAsync(
@@ -38,28 +40,43 @@ namespace ERPI_BDO.Api
                         EupId = eupId
                     });
 
+                debug?.Invoke("[GetEupTokenAsync] OK token received");
                 return jwt.AccessToken;
             }
             catch (ApiException ex)
                 when (ex.StatusCode == 200 && !string.IsNullOrWhiteSpace(ex.Response))
             {
+                debug?.Invoke("[GetEupTokenAsync] ApiException(200) – parsing body");
+
                 var parsed = JsonSerializer.Deserialize<JwtAccessToken>(
                     ex.Response,
                     new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
 
                 if (parsed?.AccessToken == null)
+                {
+                    debug?.Invoke("[GetEupTokenAsync] ERROR parsed token is null");
                     throw;
+                }
 
+                debug?.Invoke("[GetEupTokenAsync] OK token parsed from body");
                 return parsed.AccessToken;
             }
+            catch (Exception ex)
+            {
+                debug?.Invoke($"[GetEupTokenAsync] ERROR {ex}");
+                throw;
+            }
         }
+
 
         // =========================================================
         // LISTA EUP
         // =========================================================
 
-        public async Task<ICollection<CompanyEupDto>> GetEupListAsync()
+        public async Task<ICollection<CompanyEupDto>> GetEupListAsync(Action<string>? debug = null)
         {
+            debug?.Invoke("[GetEupListAsync] START");
+
             try
             {
                 var response = await _client.GetEupListAsync(
@@ -73,17 +90,28 @@ namespace ERPI_BDO.Api
                             Order = new Aorder { IsAscending = true }
                         }
                     });
+
+                debug?.Invoke($"[GetEupListAsync] OK items={response.Items?.Count}");
                 return response.Items;
             }
             catch (ApiException ex) when (ex.StatusCode == 200 && !string.IsNullOrWhiteSpace(ex.Response))
             {
+                debug?.Invoke("[GetEupListAsync] ApiException(200) – parsing body");
+
                 var parsed = JsonSerializer.Deserialize<PaginatedPageCompanyEupDto>(
                     ex.Response,
                     new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
 
+                debug?.Invoke($"[GetEupListAsync] OK parsed items={parsed?.Items?.Count}");
                 return parsed?.Items ?? new List<CompanyEupDto>();
             }
+            catch (Exception ex)
+            {
+                debug?.Invoke($"[GetEupListAsync] ERROR {ex}");
+                throw;
+            }
         }
+
 
         // =========================================================
         // KPO DETAILS – KLUCZOWA METODA
@@ -99,15 +127,15 @@ namespace ERPI_BDO.Api
 
             var endpoints = new[]
             {
-                "receiveconfirmed",
-                "transportconfirmation",
-                "approved",
-                "planned",
-                "withdrawn",
-                "confirmationgenerated",
-                "rejected",
-                "printingpage"
-            };
+        "receiveconfirmed",
+        "transportconfirmation",
+        "approved",
+        "planned",
+        "withdrawn",
+        "confirmationgenerated",
+        "rejected",
+        "printingpage"
+    };
 
             foreach (var endpoint in endpoints)
             {
@@ -139,24 +167,24 @@ namespace ERPI_BDO.Api
                         continue;
 
                     // =====================================================
-                    // 🔴 KLUCZOWE: MAPOWANIE company {}
+                    // ✅ MAPOWANIE company {} → CARRIER (zgodne z DTO)
                     // =====================================================
-                    if (root.TryGetProperty("company", out var company))
+                    if (companyType == 1 && root.TryGetProperty("company", out var company))
                     {
-                        details.IdentificationNumber =
+                        details.CarrierIdentificationNumber =
                             GetString(company, "identificationNumber", "registryNumber");
 
-                        details.Nip =
+                        details.CarrierNip =
                             GetString(company, "nip");
 
-                        details.EuNip =
+                        details.CarrierEuNip =
                             GetString(company, "euNip");
 
-                        details.RegistrationNumber =
+                        details.CarrierRegistrationNumber =
                             GetString(company, "registryNumber");
 
                         debug?.Invoke(
-                            $"[COMPANY] Nip={details.Nip}, Registry={details.RegistrationNumber}");
+                            $"[CARRIER] Nip={details.CarrierNip}, Registry={details.CarrierRegistrationNumber}");
                     }
 
                     debug?.Invoke(
@@ -174,6 +202,7 @@ namespace ERPI_BDO.Api
             debug?.Invoke($"DETAILS NOT FOUND for KPO {kpoId}");
             return null;
         }
+
 
         // =========================================================
         // JSON HELPER

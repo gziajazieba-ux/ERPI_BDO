@@ -3,14 +3,14 @@ using System.Text.Json.Serialization;
 
 namespace ERPI_BDO.OpenApi.WasteRegister.Models
 {
-    public class KpoDetailsDto
+    public sealed class KpoDetailsDto
     {
-        // =========================================================
+        // =====================================================
         // IDENTYFIKACJA
-        // =========================================================
+        // =====================================================
 
         [JsonPropertyName("kpoId")]
-        public Guid KpoId { get; set; }
+        public Guid? KpoId { get; set; }
 
         [JsonPropertyName("year")]
         public int? Year { get; set; }
@@ -18,9 +18,9 @@ namespace ERPI_BDO.OpenApi.WasteRegister.Models
         [JsonPropertyName("cardNumber")]
         public string? CardNumber { get; set; }
 
-        // =========================================================
+        // =====================================================
         // STATUS
-        // =========================================================
+        // =====================================================
 
         [JsonPropertyName("cardStatusId")]
         public int? CardStatusId { get; set; }
@@ -31,9 +31,9 @@ namespace ERPI_BDO.OpenApi.WasteRegister.Models
         [JsonPropertyName("cardStatusCodeName")]
         public string? CardStatusCodeName { get; set; }
 
-        // =========================================================
+        // =====================================================
         // SENDER
-        // =========================================================
+        // =====================================================
 
         [JsonPropertyName("senderCompanyId")]
         public Guid? SenderCompanyId { get; set; }
@@ -56,9 +56,9 @@ namespace ERPI_BDO.OpenApi.WasteRegister.Models
         [JsonPropertyName("senderNip")]
         public string? SenderNip { get; set; }
 
-        // =========================================================
+        // =====================================================
         // RECEIVER
-        // =========================================================
+        // =====================================================
 
         [JsonPropertyName("receiverCompanyId")]
         public Guid? ReceiverCompanyId { get; set; }
@@ -81,9 +81,9 @@ namespace ERPI_BDO.OpenApi.WasteRegister.Models
         [JsonPropertyName("receiverNip")]
         public string? ReceiverNip { get; set; }
 
-        // =========================================================
-        // CARRIER (TRANSPORTUJ¥CY) – ROZSZERZONE
-        // =========================================================
+        // =====================================================
+        // CARRIER
+        // =====================================================
 
         [JsonPropertyName("carrierCompanyId")]
         public Guid? CarrierCompanyId { get; set; }
@@ -94,20 +94,24 @@ namespace ERPI_BDO.OpenApi.WasteRegister.Models
         [JsonPropertyName("carrierCompanyName")]
         public string? CarrierCompanyName { get; set; }
 
+        [JsonPropertyName("carrierIdentificationNumber")]
+        public string? CarrierIdentificationNumber { get; set; }
+
+        [JsonPropertyName("carrierNip")]
+        public string? CarrierNip { get; set; }
+
+        [JsonPropertyName("carrierEuNip")]
+        public string? CarrierEuNip { get; set; }
+
+        [JsonPropertyName("carrierRegistrationNumber")]
+        public string? CarrierRegistrationNumber { get; set; }
+
         [JsonPropertyName("vehicleRegNumber")]
         public string? VehicleRegNumber { get; set; }
 
-        // --- KLUCZOWE BRAKUJ¥CE POLA ---
-        // (BDO zwraca je w company{} dla CompanyType = Carrier)
-
-        public string? IdentificationNumber { get; set; }   // numer rejestrowy BDO
-        public string? Nip { get; set; }
-        public string? EuNip { get; set; }
-        public string? RegistrationNumber { get; set; }
-
-        // =========================================================
+        // =====================================================
         // ODPAD
-        // =========================================================
+        // =====================================================
 
         [JsonPropertyName("wasteCodeId")]
         public int? WasteCodeId { get; set; }
@@ -118,6 +122,16 @@ namespace ERPI_BDO.OpenApi.WasteRegister.Models
         [JsonPropertyName("wasteCodeDescription")]
         public string? WasteCodeDescription { get; set; }
 
+        [JsonPropertyName("wasteMass")]
+        public double? WasteMass { get; set; }
+
+        [JsonPropertyName("revisedWasteMass")]
+        public double? RevisedWasteMass { get; set; }
+
+        [JsonPropertyName("correctedWasteMass")]
+        public double? CorrectedWasteMass { get; set; }
+
+        // --- EX / NIEBEZPIECZNE ---
         [JsonPropertyName("wasteCodeExtended")]
         public bool? WasteCodeExtended { get; set; }
 
@@ -130,113 +144,78 @@ namespace ERPI_BDO.OpenApi.WasteRegister.Models
         [JsonPropertyName("hazardousWasteReclassificationDescription")]
         public string? HazardousWasteReclassificationDescription { get; set; }
 
-        // =========================================================
-        // MASY
-        // =========================================================
-
-        [JsonPropertyName("wasteMass")]
-        public decimal? WasteMass { get; set; }
-
-        [JsonPropertyName("revisedWasteMass")]
-        public decimal? RevisedWasteMass { get; set; }
-
-        [JsonPropertyName("correctedWasteMass")]
-        public decimal? CorrectedWasteMass { get; set; }
-
-        // =========================================================
-        // DATY / CZASY
-        // =========================================================
+        // =====================================================
+        // TRANSPORT – DATY / STATUSY
+        // =====================================================
 
         [JsonPropertyName("plannedTransportTime")]
-        public DateTime? PlannedTransportTime { get; set; }
+        public DateTimeOffset? PlannedTransportTime { get; set; }
 
         [JsonPropertyName("realTransportTime")]
-        public DateTime? RealTransportTime { get; set; }
+        public DateTimeOffset? RealTransportTime { get; set; }
 
         [JsonPropertyName("receiveConfirmationTime")]
-        public DateTime? ReceiveConfirmationTime { get; set; }
+        public DateTimeOffset? ReceiveConfirmationTime { get; set; }
+
+        [JsonPropertyName("receiveConfirmationTimeFromKpo")]
+        public DateTimeOffset? ReceiveConfirmationTimeFromKpo { get; set; }
 
         [JsonPropertyName("transportConfirmationTime")]
-        public DateTime? TransportConfirmationTime { get; set; }
+        public DateTimeOffset? TransportConfirmationTime { get; set; }
 
         [JsonPropertyName("cardApprovalTime")]
-        public DateTime? CardApprovalTime { get; set; }
+        public DateTimeOffset? CardApprovalTime { get; set; }
+
+        [JsonPropertyName("approvalUser")]
+        public string? ApprovalUser { get; set; }
 
         [JsonPropertyName("cardRejectionTime")]
-        public DateTime? CardRejectionTime { get; set; }
+        public DateTimeOffset? CardRejectionTime { get; set; }
 
-        // =========================================================
-        // WYTWARZANIE ODPADU
-        // =========================================================
+        [JsonPropertyName("cardWithdrawalTime")]
+        public DateTimeOffset? CardWithdrawalTime { get; set; }
 
-        [JsonPropertyName("isWasteGenerating")]
-        public bool? IsWasteGenerating { get; set; }
+        [JsonPropertyName("withdrawnByUser")]
+        public string? WithdrawnByUser { get; set; }
 
-        [JsonPropertyName("wasteGeneratedTeryt")]
-        public string? WasteGeneratedTeryt { get; set; }
+        [JsonPropertyName("generatingConfirmationTime")]
+        public DateTimeOffset? GeneratingConfirmationTime { get; set; }
 
-        [JsonPropertyName("wasteGeneratedTerytPk")]
-        public string? WasteGeneratedTerytPk { get; set; }
+        [JsonPropertyName("generatingConfirmationUser")]
+        public string? GeneratingConfirmationUser { get; set; }
 
-        [JsonPropertyName("wasteGeneratingAdditionalInfo")]
-        public string? WasteGeneratingAdditionalInfo { get; set; }
+        // =====================================================
+        // TRANSPORT – RODZAJ
+        // =====================================================
 
-        // =========================================================
-        // ADRES / KRAJ
-        // =========================================================
+        [JsonPropertyName("isRoadTransport")]
+        public bool? IsRoadTransport { get; set; }
 
-        [JsonPropertyName("addressHtml")]
-        public string? AddressHtml { get; set; }
+        [JsonPropertyName("isRailwayTransport")]
+        public bool? IsRailwayTransport { get; set; }
 
-        [JsonPropertyName("terytPk")]
-        public string? TerytPk { get; set; }
+        [JsonPropertyName("isMaritimeTransport")]
+        public bool? IsMaritimeTransport { get; set; }
 
-        [JsonPropertyName("postalCode")]
-        public string? PostalCode { get; set; }
+        [JsonPropertyName("isAirTransport")]
+        public bool? IsAirTransport { get; set; }
 
-        [JsonPropertyName("locality")]
-        public string? Locality { get; set; }
+        [JsonPropertyName("isInlandWaterTransport")]
+        public bool? IsInlandWaterTransport { get; set; }
 
-        [JsonPropertyName("street")]
-        public string? Street { get; set; }
+        // =====================================================
+        // PROCES / CERTYFIKATY
+        // =====================================================
 
-        [JsonPropertyName("buildingNumber")]
-        public string? BuildingNumber { get; set; }
+        [JsonPropertyName("wasteProcessId")]
+        public int? WasteProcessId { get; set; }
 
-        [JsonPropertyName("localNumber")]
-        public string? LocalNumber { get; set; }
+        [JsonPropertyName("certificateNumberAndBoxNumbers")]
+        public string? CertificateNumberAndBoxNumbers { get; set; }
 
-        [JsonPropertyName("hasNoBuildingNumber")]
-        public bool? HasNoBuildingNumber { get; set; }
-
-        [JsonPropertyName("foreignCompany")]
-        public bool? ForeignCompany { get; set; }
-
-        [JsonPropertyName("countryId")]
-        public int? CountryId { get; set; }
-
-        [JsonPropertyName("countryName")]
-        public string? CountryName { get; set; }
-
-        // =========================================================
-        // REWIZJE / ODRZUCENIA
-        // =========================================================
-
-        [JsonPropertyName("isRevised")]
-        public bool? IsRevised { get; set; }
-
-        [JsonPropertyName("revisedAt")]
-        public DateTime? RevisedAt { get; set; }
-
-        [JsonPropertyName("revisedBy")]
-        public string? RevisedBy { get; set; }
-
-        [JsonPropertyName("rejectedByUser")]
-        public string? RejectedByUser { get; set; }
-
-        // =========================================================
-        // DODATKOWE
-        // =========================================================
+        // =====================================================
+        // UWAGI / INFO
+        // =====================================================
 
         [JsonPropertyName("remarks")]
         public string? Remarks { get; set; }
