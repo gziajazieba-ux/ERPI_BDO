@@ -1,43 +1,46 @@
-name: Generate Project Map
+name: Generate MAPA_PROJEKTU_AI
 
 on:
   push:
-    branches:
-      - master
-      - main
+    branches: [ master, main ]
 
 permissions:
   contents: write
 
 jobs:
-  generate-map:
+  build:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: Checkout code
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
       - name: Generate MAPA_PROJEKTU_AI.txt
+        shell: bash
         run: |
-          REPO_NAME="ERPI_BDO"
-          REPO_OWNER="gziajazieba-ux"
-          BRANCH="master"
+          set -e
+
           OUTPUT="MAPA_PROJEKTU_AI.txt"
           MAX_LINES=30
 
-          NOW=$(date +"%Y-%m-%d %H:%M:%S")
-          HEAD_COMMIT=$(git rev-parse --short HEAD)
+          REPO_FULL="${{ github.repository }}"
+          BRANCH="${{ github.ref_name }}"
 
-          echo "### MAPA PROJEKTU ${REPO_NAME} ###" > $OUTPUT
-          echo "Repo: https://github.com/${REPO_OWNER}/${REPO_NAME}" >> $OUTPUT
-          echo "Gałąź: ${BRANCH}" >> $OUTPUT
-          echo "Ostatnia aktualizacja mapy: ${NOW}" >> $OUTPUT
-          echo "Commit HEAD: ${HEAD_COMMIT}" >> $OUTPUT
-          echo "" >> $OUTPUT
-          echo "--------------------------------------------------" >> $OUTPUT
-          echo "" >> $OUTPUT
+          RAW_BASE="https://raw.githubusercontent.com/${REPO_FULL}/${BRANCH}"
+          BLOB_BASE="https://github.com/${REPO_FULL}/blob/${BRANCH}"
+
+          echo "### MAPA PROJEKTU AI ###" > "$OUTPUT"
+          echo "Repo: https://github.com/${REPO_FULL}" >> "$OUTPUT"
+          echo "Gałąź: ${BRANCH}" >> "$OUTPUT"
+
+          # 🔥 KLUCZOWA LINIA – ZAWSZE INNA
+          echo "Ostatnia aktualizacja: $(date +'%Y-%m-%d %H:%M:%S')" >> "$OUTPUT"
+
+          echo "Commit HEAD: $(git rev-parse --short HEAD)" >> "$OUTPUT"
+          echo "--------------------------------------------------" >> "$OUTPUT"
+          echo "" >> "$OUTPUT"
 
           find . -type f \
             ! -path "./.git/*" \
@@ -46,42 +49,38 @@ jobs:
             | sort | while read FILE; do
 
               REL_PATH="/${FILE#./}"
-              SIZE=$(du -k "$FILE" | cut -f1)K
-              MTIME=$(date -r "$FILE" +"%Y-%m-%d %H:%M:%S")
+              SIZE=$(stat -c%s "$FILE")
+              MTIME=$(stat -c "%y" "$FILE" | cut -d'.' -f1)
               HASH=$(sha1sum "$FILE" | cut -d' ' -f1)
               COMMIT=$(git log -n 1 --pretty=format:%h -- "$FILE" || echo "brak")
 
-              RAW_URL="https://raw.githubusercontent.com/${REPO_OWNER}/${REPO_NAME}/${BRANCH}${REL_PATH}"
-              BLOB_URL="https://github.com/${REPO_OWNER}/${REPO_NAME}/blob/${BRANCH}${REL_PATH}"
+              RAW_URL="${RAW_BASE}${REL_PATH}"
+              BLOB_URL="${BLOB_BASE}${REL_PATH}"
 
-              echo "[PLIK]" >> $OUTPUT
-              echo "Ścieżka repo: ${REL_PATH}" >> $OUTPUT
-              echo "Rozmiar: ${SIZE}" >> $OUTPUT
-              echo "Ostatnia modyfikacja pliku: ${MTIME}" >> $OUTPUT
-              echo "Hash (SHA1): ${HASH}" >> $OUTPUT
-              echo "Ostatni commit: ${COMMIT}" >> $OUTPUT
-              echo "Link GitHub: ${BLOB_URL}" >> $OUTPUT
-              echo "Link RAW: ${RAW_URL}" >> $OUTPUT
-              echo "" >> $OUTPUT
+              echo "[PLIK]" >> "$OUTPUT"
+              echo "Ścieżka repo: ${REL_PATH}" >> "$OUTPUT"
+              echo "Rozmiar (B): ${SIZE}" >> "$OUTPUT"
+              echo "Ostatnia modyfikacja pliku: ${MTIME}" >> "$OUTPUT"
+              echo "Hash (SHA1): ${HASH}" >> "$OUTPUT"
+              echo "Ostatni commit pliku: ${COMMIT}" >> "$OUTPUT"
+              echo "Link GitHub: ${BLOB_URL}" >> "$OUTPUT"
+              echo "Link RAW: ${RAW_URL}" >> "$OUTPUT"
+              echo "" >> "$OUTPUT"
 
-              echo "Wyciąg (pierwsze ${MAX_LINES} linii):" >> $OUTPUT
-              echo '"""' >> $OUTPUT
-              head -n ${MAX_LINES} "$FILE" >> $OUTPUT || echo "[nie można odczytać]" >> $OUTPUT
-              echo '"""' >> $OUTPUT
-              echo "" >> $OUTPUT
-              echo "--------------------------------------------------" >> $OUTPUT
-              echo "" >> $OUTPUT
+              echo "Wyciąg (pierwsze ${MAX_LINES} linii):" >> "$OUTPUT"
+              echo '"""' >> "$OUTPUT"
+              head -n ${MAX_LINES} "$FILE" >> "$OUTPUT" || true
+              echo '"""' >> "$OUTPUT"
+              echo "" >> "$OUTPUT"
+              echo "--------------------------------------------------" >> "$OUTPUT"
+              echo "" >> "$OUTPUT"
           done
 
-      - name: Commit and push project map
+      - name: Commit and Push MAPA_PROJEKTU_AI.txt
         run: |
-          git config user.name "github-actions"
-          git config user.email "github-actions@github.com"
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
 
-          if git diff --quiet; then
-            echo "Brak zmian w mapie – commit pominięty."
-          else
-            git add MAPA_PROJEKTU_AI.txt
-            git commit -m "Automatyczna aktualizacja mapy projektu"
-            git push
-          fi
+          git add MAPA_PROJEKTU_AI.txt
+          git commit -m "Auto-update MAPA_PROJEKTU_AI.txt" || exit 0
+          git push
