@@ -1,8 +1,7 @@
 ### Mapa plików Raw ###
-Ostatnia aktualizacja: 2026-01-03 11:25:01
+Ostatnia aktualizacja: 2026-01-03 11:27:12
 ----------------------------------------------------------
 https://raw.githubusercontent.com/gziajazieba-ux/ERPI_BDO/master/ERPI_BDO.sln
-https://raw.githubusercontent.com/gziajazieba-ux/ERPI_BDO/master/mapa_projektu_20260103_112131.txt
 https://raw.githubusercontent.com/gziajazieba-ux/ERPI_BDO/master/ERPI_BDO/Properties/Resources.resx
 https://raw.githubusercontent.com/gziajazieba-ux/ERPI_BDO/master/ERPI_BDO/Properties/Resources.Designer.cs
 https://raw.githubusercontent.com/gziajazieba-ux/ERPI_BDO/master/ERPI_BDO/FormGlowne.Designer.cs
@@ -33,4 +32,3 @@ https://raw.githubusercontent.com/gziajazieba-ux/ERPI_BDO/master/ERPI_BDO/API/Kp
 https://raw.githubusercontent.com/gziajazieba-ux/ERPI_BDO/master/ERPI_BDO/API/KpoModels.cs
 https://raw.githubusercontent.com/gziajazieba-ux/ERPI_BDO/master/ERPI_BDO/API/BdoEupContext.cs
 https://raw.githubusercontent.com/gziajazieba-ux/ERPI_BDO/master/ERPI_BDO/API/BdoApiClient.cs
-https://raw.githubusercontent.com/gziajazieba-ux/ERPI_BDO/master/mapa_projektu_20260103_111300.txt
