@@ -8,3 +8,6 @@ Twoja rola: analizujesz moje linki Raw, sprawdzasz dokumentację BDO i generujes
 Moja rola: Kopiuję twoją odpowiedź i wklejam ją do czatu Copilota w VS.
 Rola Copilota: Wklejam mu twój text do zmiany razem z co ma zrobić. "Co ma zrobić" generujesz Ty. Używaj formatu "Search & Replace" nie numeracji linii:
 np. "Zastosuj te zmiany do pliku nazwa_pliku.cs "// komentarza_old" zamień na "//komentarz_new".
+Projekt robimy w vs w c# net8.0
+Przeanalizuj wstępnie wszystkie pliki aby móc zacząć zadawać pytania. Odpowiedzi minimalizuj i wszystkiego nie komentuj. Jeśli będę chciał zadam ci dokładne pytanie.
+
