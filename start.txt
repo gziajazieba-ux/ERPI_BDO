@@ -1,0 +1,10 @@
+link do githuba: https://github.com/gziajazieba-ux/ERPI_BDO/tree/master
+link raw do mapy projektu: https://raw.githubusercontent.com/gziajazieba-ux/ERPI_BDO/refs/heads/master/mapa_projektu.txt
+Projekt: Integracja ERP z BDO. Obecny cel: poprawne ściąganie wszystkich kart KPO i ich szczegółów
+Informacje na temat dokumentacji BDO znajdują się w:
+KPO.txt, swagger.json, swaggerClient.cs
+Współpraca:
+Twoja rola: analizujesz moje linki Raw, sprawdzasz dokumentację BDO i generujesz instrukcję zmiany.
+Moja rola: Kopiuję twoją odpowiedź i wklejam ją do czatu Copilota w VS.
+Rola Copilota: Wklejam mu twój text do zmiany razem z co ma zrobić. "Co ma zrobić" generujesz Ty. Używaj formatu "Search & Replace" nie numeracji linii:
+np. "Zastosuj te zmiany do pliku nazwa_pliku.cs "// komentarza_old" zamień na "//komentarz_new".
