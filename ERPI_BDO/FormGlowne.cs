@@ -1,4 +1,5 @@
 ﻿using ERPI_BDO.Api;
+using ERPI_BDO.Models;
 using ERPI_BDO.OpenApi.WasteRegister; // Tu nadal trzymamy DTO z NSwag dla listy, np. CompanyEupDto, KpoSearchResult
 using ERPI_BDO.OpenApi.WasteRegister.Models; // <- DODANE: tu jest KpoDetailsDto
 using ERPI_BDO.Portal;
@@ -10,6 +11,7 @@ using System.Globalization; // dla parsowania daty/czasu
 using System.Linq; // Dodaj to
 using System.Net;
 using System.Net.Http.Headers;
+using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;
 using System.Threading;
@@ -282,6 +284,7 @@ namespace ERPI_BDO
 
             try
             {
+                bool wgDatTransportu = checkBoxDatyTransportu.Checked;
                 if (_eupContext == null || string.IsNullOrEmpty(_eupToken))
                 {
                     lblStatus.Text = "Błąd: Brakuje kontekstu EUP.";
@@ -311,21 +314,33 @@ namespace ERPI_BDO
                     SearchInCarriers = true,
                     SearchInSenders = true,
 
-                    ReceiveConfirmationDateRange = true,
-                    ReceiveConfirmationDateFrom = dtKpoOd.Value.ToString("yyyy-MM-ddT00:00:00.000Z"),
-                    ReceiveConfirmationDateTo = dtKpoDo.Value.ToString("yyyy-MM-ddT23:59:59.999Z"),
+                    ReceiveConfirmationDateRange = !wgDatTransportu,
+                    ReceiveConfirmationDateFrom = wgDatTransportu ? null : dtKpoOd.Value.ToString("yyyy-MM-ddT00:00:00.000Z"),
+                    ReceiveConfirmationDateTo = wgDatTransportu ? null : dtKpoDo.Value.ToString("yyyy-MM-ddT23:59:59.999Z"),
 
-                    // 🔴 MUSI BYĆ JAWNIE
-                    TransportDateRange = false,
-                    TransportDateFrom = (string?)null,
-                    TransportDateTo = (string?)null
+                    TransportDateRange = wgDatTransportu,
+                    TransportDateFrom = wgDatTransportu ? dtKpoOd.Value.ToString("yyyy-MM-ddT00:00:00.000Z") : null,
+                    TransportDateTo = wgDatTransportu ? dtKpoDo.Value.ToString("yyyy-MM-ddT23:59:59.999Z") : null
+
                 };
 
 
-                var receiverList = await PostSearchAndBuildFullDetailsListAsync(
-                    "/api/WasteRegister/WasteTransferCard/v1/Kpo/receiver/search",
-                    receiverCriteria,
-                    companyType: 2
+                //var receiverList = await PostSearchAndBuildFullDetailsListAsync(
+                //    "/api/WasteRegister/WasteTransferCard/v1/Kpo/receiver/search",
+                //    receiverCriteria,
+                //    companyType: 2
+                //);
+                //var receiverList = BuildListFromSearch(searchReceiverResponse, CompanyType.Receiver);
+                //var receiverList = searchReceiverResponse.Items;
+                //var receiverList = BuildListFromSearch(receiverResponse, CompanyType.Receiver);
+                //var receiverList = await PostSearchAndBuildFullDetailsListAsync(
+                // "/api/WasteRegister/WasteTransferCard/v1/Kpo/receiver/search",
+                //receiverCriteria,
+                //companyType: 2
+                //);
+                var receiverList = await PostSearchOnlyAsync(
+                "/api/WasteRegister/WasteTransferCard/v1/Kpo/receiver/search",
+                receiverCriteria
                 );
 
                 // =========================================================
@@ -343,21 +358,26 @@ namespace ERPI_BDO
                     SearchInCarriers = true,
                     SearchInReceivers = true,
 
-                    TransportDateRange = true,
-                    TransportDateFrom = dtKpoOd.Value.ToString("yyyy-MM-ddT00:00:00.000Z"),
-                    TransportDateTo = dtKpoDo.Value.ToString("yyyy-MM-ddT23:59:59.999Z"),
+                    TransportDateRange = wgDatTransportu,
+                    TransportDateFrom = wgDatTransportu ? dtKpoOd.Value.ToString("yyyy-MM-ddT00:00:00.000Z") : null,
+                    TransportDateTo = wgDatTransportu ? dtKpoDo.Value.ToString("yyyy-MM-ddT23:59:59.999Z") : null,
 
-                    // 🔴 MUSI BYĆ JAWNIE
-                    ReceiveConfirmationDateRange = false,
-                    ReceiveConfirmationDateFrom = (string?)null,
-                    ReceiveConfirmationDateTo = (string?)null
+                    ReceiveConfirmationDateRange = !wgDatTransportu,
+                    ReceiveConfirmationDateFrom = wgDatTransportu ? null : dtKpoOd.Value.ToString("yyyy-MM-ddT00:00:00.000Z"),
+                    ReceiveConfirmationDateTo = wgDatTransportu ? null : dtKpoDo.Value.ToString("yyyy-MM-ddT23:59:59.999Z")
+
                 };
 
 
-                var senderList = await PostSearchAndBuildFullDetailsListAsync(
-                    "/api/WasteRegister/WasteTransferCard/v1/Kpo/sender/search",
-                    senderCriteria,
-                    companyType: 0
+                //var senderList = await PostSearchAndBuildFullDetailsListAsync(
+                //    "/api/WasteRegister/WasteTransferCard/v1/Kpo/sender/search",
+                //    senderCriteria,
+                //    companyType: 0
+                //);
+                //var senderList = BuildListFromSearch(searchSenderResponse, CompanyType.Sender);
+                var senderList = await PostSearchOnlyAsync(
+                "/api/WasteRegister/WasteTransferCard/v1/Kpo/sender/search",
+                senderCriteria
                 );
 
                 // =========================================================
@@ -375,21 +395,26 @@ namespace ERPI_BDO
                     SearchInSenders = true,
                     SearchInReceivers = true,
 
-                    TransportDateRange = true,
-                    TransportDateFrom = dtKpoOd.Value.ToString("yyyy-MM-ddT00:00:00.000Z"),
-                    TransportDateTo = dtKpoDo.Value.ToString("yyyy-MM-ddT23:59:59.999Z"),
+                    TransportDateRange = wgDatTransportu,
+                    TransportDateFrom = wgDatTransportu ? dtKpoOd.Value.ToString("yyyy-MM-ddT00:00:00.000Z") : null,
+                    TransportDateTo = wgDatTransportu ? dtKpoDo.Value.ToString("yyyy-MM-ddT23:59:59.999Z") : null,
 
-                    // 🔴 MUSI BYĆ JAWNIE
-                    ReceiveConfirmationDateRange = false,
-                    ReceiveConfirmationDateFrom = (string?)null,
-                    ReceiveConfirmationDateTo = (string?)null
+                    ReceiveConfirmationDateRange = !wgDatTransportu,
+                    ReceiveConfirmationDateFrom = wgDatTransportu ? null : dtKpoOd.Value.ToString("yyyy-MM-ddT00:00:00.000Z"),
+                    ReceiveConfirmationDateTo = wgDatTransportu ? null : dtKpoDo.Value.ToString("yyyy-MM-ddT23:59:59.999Z")
+
                 };
 
 
-                var transportList = await PostSearchAndBuildFullDetailsListAsync(
-                    "/api/WasteRegister/WasteTransferCard/v1/Kpo/carrier/search",
-                    transportCriteria,
-                    companyType: 1
+                //var transportList = await PostSearchAndBuildFullDetailsListAsync(
+                //    "/api/WasteRegister/WasteTransferCard/v1/Kpo/carrier/search",
+                //    transportCriteria,
+                //    companyType: 1
+                //);
+                //var transportList = BuildListFromSearch(searchTransportResponse, CompanyType.Carrier);
+                var transportList = await PostSearchOnlyAsync(
+                "/api/WasteRegister/WasteTransferCard/v1/Kpo/carrier/search",
+                transportCriteria
                 );
 
                 // =========================================================
@@ -531,6 +556,71 @@ namespace ERPI_BDO
                 dgv.Columns.Add(c);
             }
         }
+
+        private async Task<List<KpoReceiverListItemDto>> PostSearchOnlyAsyncold1(
+            string url,
+            object criteria)
+        {
+            DebugLogger.Add($"=== SEARCH ONLY START ({url}) ===");
+
+            if (_apiClient == null)
+                throw new InvalidOperationException("API client is not initialized.");
+
+            // 🔑 KLUCZOWA LINIA – object → HttpContent
+            var content = JsonContent.Create(criteria);
+
+            var httpResponse = await _apiClient.PostAsync(url, content);
+
+            if (!httpResponse.IsSuccessStatusCode)
+            {
+                DebugLogger.Add(
+                    $"SEARCH ONLY HTTP ERROR: {(int)httpResponse.StatusCode} {httpResponse.ReasonPhrase}");
+                return new List<KpoReceiverListItemDto>();
+            }
+
+            var searchResponse =
+                await httpResponse.Content.ReadFromJsonAsync<KpoReceiverListResponseDto>();
+
+            DebugLogger.Add(
+                $"=== SEARCH ONLY END | COUNT={searchResponse?.Items?.Count ?? 0} ===");
+
+            return searchResponse?.Items ?? new List<KpoReceiverListItemDto>();
+        }
+
+        // ZMIANA: Zwracamy nową, czystą klasę KpoSearchItemDto
+        private async Task<List<KpoSearchItemDto>> PostSearchOnlyAsync(string url, object criteria)
+        {
+            DebugLogger.Add($"=== [DEBUG] WYWOŁANIE SEARCH: {url} ===");
+
+            if (_apiClient == null) throw new InvalidOperationException("Klient API nie jest zainicjalizowany.");
+
+            var response = await _apiClient.PostAsJsonAsync(url, criteria);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                DebugLogger.Add($"[BŁĄD API] Status: {response.StatusCode} na url: {url}");
+                return new List<KpoSearchItemDto>();
+            }
+
+            // 1. POBIERAMY SUROWY TEKST - To jest nasz "jedyny punkt prawdy"
+            string rawJson = await response.Content.ReadAsStringAsync();
+
+            // 2. LOGUJEMY SUROWY JSON (pierwsze 2000 znaków), abyś mógł go skopiować do analizy
+            DebugLogger.Add($"[RAW JSON START] {url}");
+            DebugLogger.Add(rawJson.Length > 2000 ? rawJson.Substring(0, 2000) : rawJson);
+            DebugLogger.Add($"[RAW JSON END]");
+
+            // 3. DESERIALIZACJA
+            var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+            var searchResponse = JsonSerializer.Deserialize<KpoSearchResponseDto>(rawJson, options);
+
+            return searchResponse?.Items ?? new List<KpoSearchItemDto>();
+        }
+
+
+
+
+        /*
         private async Task<List<KpoReceiverFullDetailsDto>>
  PostSearchAndBuildFullDetailsListAsync(
      string searchUrl,
@@ -594,10 +684,14 @@ namespace ERPI_BDO
                     WasteCodeId = GetInt(item, "wasteCodeId"),
                     WasteCode = GetString(item, "wasteCode"),
                     WasteCodeDescription = GetString(item, "wasteCodeDescription"),
+
                     DeclaredWasteMass =
-                        GetDecimal(item, "quantity") != null
-                            ? (double?)GetDecimal(item, "quantity")
-                            : null,
+                        GetDecimal(item, "quantity") is decimal q
+                        ? (double?)q
+                        : GetDecimal(item, "wasteMass") is decimal wm
+                        ? (double?)wm
+                        : null,
+
 
                     WasteCodeExtended = GetBool(item, "wasteCodeExtended"),
                     WasteCodeExtendedDescription =
@@ -666,9 +760,25 @@ namespace ERPI_BDO
                 {
                     dto.CardStatusId = details.CardStatusId;
 
-                    dto.ReceivedWasteMass = details.WasteMass;
                     dto.RevisedWasteMass = details.RevisedWasteMass;
                     dto.CorrectedWasteMass = details.CorrectedWasteMass;
+
+                    // WasteMass z DETAILS:
+                    // - jeśli brak korekt → traktujemy jako DECLARED
+                    // - jeśli są korekty → traktujemy jako RECEIVED
+                    if (details.WasteMass != null)
+                    {
+                        if (dto.RevisedWasteMass == null && dto.CorrectedWasteMass == null)
+                        {
+                            dto.DeclaredWasteMass ??= details.WasteMass;
+                        }
+                        else
+                        {
+                            dto.ReceivedWasteMass = details.WasteMass;
+                        }
+                    }
+
+
 
                     dto.ReceiveConfirmationTime =
                         details.ReceiveConfirmationTime ??
@@ -682,6 +792,11 @@ namespace ERPI_BDO
                     dto.CertificateNumberAndBoxNumbers =
                         details.CertificateNumberAndBoxNumbers;
                 }
+                dto.EffectiveWasteMass =
+    dto.CorrectedWasteMass
+    ?? dto.RevisedWasteMass
+    ?? dto.ReceivedWasteMass
+    ?? dto.DeclaredWasteMass;
 
                 result.Add(dto);
             }
@@ -691,16 +806,7 @@ namespace ERPI_BDO
 
             return result;
         }
-
-
-
-
-
-
-
-
-
-
+        */
 
         private async void btnZaloguj_Click(object sender, EventArgs e)
         {
@@ -884,6 +990,152 @@ namespace ERPI_BDO
             btnPobierzKpo.Enabled = true;
             _kpoLoadingBaseText = "";
             _kpoLoadingDots = 0;
+        }
+
+        private List<KpoReceiverFullDetailsDto> BuildListFromSearch(
+    KpoReceiverListResponseDto response,
+    CompanyType companyType)
+        {
+            var result = new List<KpoReceiverFullDetailsDto>();
+
+            foreach (var item in response.Items)
+            {
+                var dto = new KpoReceiverFullDetailsDto
+                {
+                    // =====================================================
+                    // IDENTYFIKACJA
+                    // =====================================================
+                    CardId = item.KpoId,
+                    CardNumber = item.CardNumber,
+                    KpoCardNumber = item.KpoCardNumber,
+                    KpokCardNumber = item.KpokCardNumber,
+
+                    // =====================================================
+                    // STATUS
+                    // =====================================================
+                    Status = item.Status,
+                    CardStatus = item.CardStatus,
+                    CardStatusCodeName = item.CardStatusCodeName,
+                    IsWithdrawn = item.IsWithdrawn,
+
+                    // =====================================================
+                    // ODPAD
+                    // =====================================================
+                    WasteCodeId = item.WasteCodeId,
+                    WasteCode = item.WasteCode,
+                    WasteCodeDescription = item.WasteCodeDescription,
+                    WasteCodeAndDescription = item.WasteCodeAndDescription,
+
+                    // =====================================================
+                    // MASY LISTOWE (SEARCH)
+                    // =====================================================
+                    DeclaredWasteMass = item.Quantity.HasValue
+                        ? (double?)item.Quantity.Value
+                        : null,
+
+
+                    // =====================================================
+                    // PODMIOTY – ID
+                    // =====================================================
+                    SenderCompanyId = item.SenderCompanyId,
+                    ReceiverCompanyId = item.ReceiverCompanyId,
+                    CarrierCompanyId = item.CarrierCompanyId,
+
+                    // =====================================================
+                    // PODMIOTY – DANE PODSTAWOWE (SEARCH)
+                    // =====================================================
+                    SenderCompanyName = item.SenderCompanyName,
+                    ReceiverCompanyName = item.ReceiverNameOrFirstNameAndLastName,
+                    ReceiverNip = item.ReceiverNip,
+                    ReceiverNipEu = item.ReceiverNipEu,
+
+                    CarrierCompanyName = item.CarrierCompanyName,
+                    CarrierNip = item.CarrierNip,
+                    CarrierNipEu = item.CarrierNipEu,
+
+                    // =====================================================
+                    // TRANSPORT
+                    // =====================================================
+                    VehicleRegNumber = item.VehicleRegNumber,
+                    PlannedTransportTime = item.PlannedTransportTime,
+                    RealTransportTime = item.RealTransportTime,
+
+                    // =====================================================
+                    // DATY / UŻYTKOWNICY (SEARCH)
+                    // =====================================================
+                    //CreatedDate = item.CreatedDate,
+                    //AcceptanceDate = item.AcceptanceDate,
+                    //ReceiveDate = item.ReceiveDate,
+
+                    //CardApprovalTime = item.CardApprovalTime,
+                    //CardWithdrawalTime = item.CardWithdrawalTime,
+
+                    GeneratedByUser = item.CreatedByUser,
+                    ApprovedByUser = item.ApprovalUser,
+                    WithdrawnByUser = item.WithdrawnByUser,
+
+                    // =====================================================
+                    // DODATKOWE
+                    // =====================================================
+                    //InstallationName = item.InstallationName,
+                    //WasteProcessId = item.WasteProcessId,
+                    Remarks = item.Remarks,
+                    AdditionalInfo = item.AdditionalInfo,
+
+                    // =====================================================
+                    // KONTEKST
+                    // =====================================================
+                    CompanyType = (int)companyType
+
+                };
+
+
+                DebugLogger.Add(
+    $"[SEARCH DTO] {dto.CardNumber} | " +
+    $"Qty={dto.DeclaredWasteMass} | " +
+    $"Sender={dto.SenderCompanyId} | " +
+    $"Receiver={dto.ReceiverCompanyId} | " +
+    $"Carrier={dto.CarrierCompanyId}"
+);
+
+
+
+                result.Add(dto);
+            }
+
+            return result;
+        }
+
+        private async void dgvKpo_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex < 0) return;
+            var selected = dgvKpo.Rows[e.RowIndex].DataBoundItem as KpoSearchItemDto;
+            if (selected == null) return;
+
+            // TESTUJEMY TYLKO RECEIVER (skoro to karta z Twojej listy) ALE Z PEŁNYM LOGOWANIEM
+            string kpoId = selected.KpoId.ToString();
+            string fullUrl = $"https://api.bdo.mos.gov.pl/api/WasteRegister/WasteTransferCard/v1/Kpo/receiver/details?kpoId={kpoId}";
+
+            DebugLogger.Add($"[DEBUG URL] {fullUrl}");
+
+            // Tworzymy czysty request, żeby mieć pewność co do nagłówków
+            var request = new HttpRequestMessage(HttpMethod.Get, fullUrl);
+            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _eupToken);
+
+            var response = await _apiClient.SendAsync(request);
+
+            if (response.StatusCode == HttpStatusCode.OK)
+            {
+                string rawJson = await response.Content.ReadAsStringAsync();
+                DebugLogger.Add("[SUCCESS JSON DETAILS]");
+                DebugLogger.Add(rawJson);
+            }
+            else
+            {
+                // Tu sprawdzamy co DOKŁADNIE mówi serwer
+                string errorBody = await response.Content.ReadAsStringAsync();
+                DebugLogger.Add($"[FAIL] Status: {response.StatusCode} | Body: {errorBody}");
+            }
         }
     }
 }

@@ -167,22 +167,23 @@ namespace ERPI_BDO.OpenApi.WasteRegister.Models
         public DateTimeOffset? CardApprovalTime { get; set; }
 
         [JsonPropertyName("approvalUser")]
-        public string? ApprovalUser { get; set; }
+        public string? ApprovalUser { get; set; }        
 
         [JsonPropertyName("cardRejectionTime")]
-        public DateTimeOffset? CardRejectionTime { get; set; }
+        public string? CardRejectionTimeRaw { get; set; }
 
         [JsonPropertyName("cardWithdrawalTime")]
-        public DateTimeOffset? CardWithdrawalTime { get; set; }
+        public string? CardWithdrawalTimeRaw { get; set; }
 
         [JsonPropertyName("withdrawnByUser")]
         public string? WithdrawnByUser { get; set; }
 
         [JsonPropertyName("generatingConfirmationTime")]
-        public DateTimeOffset? GeneratingConfirmationTime { get; set; }
+        public string? GeneratingConfirmationTimeRaw { get; set; }
 
         [JsonPropertyName("generatingConfirmationUser")]
         public string? GeneratingConfirmationUser { get; set; }
+
 
         // =====================================================
         // TRANSPORT – RODZAJ

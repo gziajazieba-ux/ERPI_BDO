@@ -41,13 +41,15 @@
             btnWybierzEup = new Button();
             tabPage3 = new TabPage();
             dgvKpo = new DataGridView();
+            tabPage4 = new TabPage();
+            dgvKpoSender = new DataGridView();
+            tabPage5 = new TabPage();
+            dgvKpoTransport = new DataGridView();
             btnPobierzKpo = new Button();
             label2 = new Label();
             label1 = new Label();
             dtKpoDo = new DateTimePicker();
             dtKpoOd = new DateTimePicker();
-            tabPage4 = new TabPage();
-            dgvKpoSender = new DataGridView();
             statusStrip1 = new StatusStrip();
             lblStatus = new ToolStripStatusLabel();
             toolStripStatusLabel1 = new ToolStripStatusLabel();
@@ -57,9 +59,8 @@
             menuStrip1 = new MenuStrip();
             debugToolStripMenuItem1 = new ToolStripMenuItem();
             panel5 = new Panel();
+            checkBoxDatyTransportu = new CheckBox();
             panel6 = new Panel();
-            tabPage5 = new TabPage();
-            dgvKpoTransport = new DataGridView();
             tabControl1.SuspendLayout();
             tabPage1.SuspendLayout();
             panel4.SuspendLayout();
@@ -73,12 +74,12 @@
             ((System.ComponentModel.ISupportInitialize)dgvKpo).BeginInit();
             tabPage4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvKpoSender).BeginInit();
+            tabPage5.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)dgvKpoTransport).BeginInit();
             statusStrip1.SuspendLayout();
             menuStrip1.SuspendLayout();
             panel5.SuspendLayout();
             panel6.SuspendLayout();
-            tabPage5.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)dgvKpoTransport).BeginInit();
             SuspendLayout();
             // 
             // tabControl1
@@ -217,10 +218,55 @@
             dgvKpo.Name = "dgvKpo";
             dgvKpo.Size = new Size(976, 444);
             dgvKpo.TabIndex = 0;
+            dgvKpo.CellDoubleClick += dgvKpo_CellDoubleClick;
+            // 
+            // tabPage4
+            // 
+            tabPage4.Controls.Add(dgvKpoSender);
+            tabPage4.Location = new Point(4, 24);
+            tabPage4.Name = "tabPage4";
+            tabPage4.Padding = new Padding(3);
+            tabPage4.Size = new Size(982, 450);
+            tabPage4.TabIndex = 3;
+            tabPage4.Text = "KPO przekazujący";
+            tabPage4.UseVisualStyleBackColor = true;
+            // 
+            // dgvKpoSender
+            // 
+            dgvKpoSender.AllowUserToAddRows = false;
+            dgvKpoSender.AllowUserToDeleteRows = false;
+            dgvKpoSender.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dgvKpoSender.Dock = DockStyle.Fill;
+            dgvKpoSender.Location = new Point(3, 3);
+            dgvKpoSender.Name = "dgvKpoSender";
+            dgvKpoSender.ReadOnly = true;
+            dgvKpoSender.RowHeadersWidth = 51;
+            dgvKpoSender.Size = new Size(976, 444);
+            dgvKpoSender.TabIndex = 6;
+            // 
+            // tabPage5
+            // 
+            tabPage5.Controls.Add(dgvKpoTransport);
+            tabPage5.Location = new Point(4, 24);
+            tabPage5.Name = "tabPage5";
+            tabPage5.Padding = new Padding(3);
+            tabPage5.Size = new Size(982, 450);
+            tabPage5.TabIndex = 4;
+            tabPage5.Text = "KPO transportujący";
+            tabPage5.UseVisualStyleBackColor = true;
+            // 
+            // dgvKpoTransport
+            // 
+            dgvKpoTransport.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dgvKpoTransport.Dock = DockStyle.Fill;
+            dgvKpoTransport.Location = new Point(3, 3);
+            dgvKpoTransport.Name = "dgvKpoTransport";
+            dgvKpoTransport.Size = new Size(976, 444);
+            dgvKpoTransport.TabIndex = 0;
             // 
             // btnPobierzKpo
             // 
-            btnPobierzKpo.Location = new Point(523, 15);
+            btnPobierzKpo.Location = new Point(741, 18);
             btnPobierzKpo.Name = "btnPobierzKpo";
             btnPobierzKpo.Size = new Size(121, 24);
             btnPobierzKpo.TabIndex = 4;
@@ -259,30 +305,6 @@
             dtKpoOd.Name = "dtKpoOd";
             dtKpoOd.Size = new Size(200, 23);
             dtKpoOd.TabIndex = 0;
-            // 
-            // tabPage4
-            // 
-            tabPage4.Controls.Add(dgvKpoSender);
-            tabPage4.Location = new Point(4, 24);
-            tabPage4.Name = "tabPage4";
-            tabPage4.Padding = new Padding(3);
-            tabPage4.Size = new Size(982, 450);
-            tabPage4.TabIndex = 3;
-            tabPage4.Text = "KPO przekazujący";
-            tabPage4.UseVisualStyleBackColor = true;
-            // 
-            // dgvKpoSender
-            // 
-            dgvKpoSender.AllowUserToAddRows = false;
-            dgvKpoSender.AllowUserToDeleteRows = false;
-            dgvKpoSender.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgvKpoSender.Dock = DockStyle.Fill;
-            dgvKpoSender.Location = new Point(3, 3);
-            dgvKpoSender.Name = "dgvKpoSender";
-            dgvKpoSender.ReadOnly = true;
-            dgvKpoSender.RowHeadersWidth = 51;
-            dgvKpoSender.Size = new Size(976, 444);
-            dgvKpoSender.TabIndex = 6;
             // 
             // statusStrip1
             // 
@@ -341,6 +363,7 @@
             // 
             // panel5
             // 
+            panel5.Controls.Add(checkBoxDatyTransportu);
             panel5.Controls.Add(label2);
             panel5.Controls.Add(btnPobierzKpo);
             panel5.Controls.Add(label1);
@@ -352,6 +375,18 @@
             panel5.Size = new Size(990, 54);
             panel5.TabIndex = 9;
             // 
+            // checkBoxDatyTransportu
+            // 
+            checkBoxDatyTransportu.AutoSize = true;
+            checkBoxDatyTransportu.Checked = true;
+            checkBoxDatyTransportu.CheckState = CheckState.Checked;
+            checkBoxDatyTransportu.Location = new Point(532, 22);
+            checkBoxDatyTransportu.Name = "checkBoxDatyTransportu";
+            checkBoxDatyTransportu.Size = new Size(189, 19);
+            checkBoxDatyTransportu.TabIndex = 5;
+            checkBoxDatyTransportu.Text = "daty transportu / zatwierdzenia";
+            checkBoxDatyTransportu.UseVisualStyleBackColor = true;
+            // 
             // panel6
             // 
             panel6.Controls.Add(tabControl1);
@@ -360,26 +395,6 @@
             panel6.Name = "panel6";
             panel6.Size = new Size(990, 478);
             panel6.TabIndex = 10;
-            // 
-            // tabPage5
-            // 
-            tabPage5.Controls.Add(dgvKpoTransport);
-            tabPage5.Location = new Point(4, 24);
-            tabPage5.Name = "tabPage5";
-            tabPage5.Padding = new Padding(3);
-            tabPage5.Size = new Size(982, 450);
-            tabPage5.TabIndex = 4;
-            tabPage5.Text = "KPO transportujący";
-            tabPage5.UseVisualStyleBackColor = true;
-            // 
-            // dgvKpoTransport
-            // 
-            dgvKpoTransport.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgvKpoTransport.Dock = DockStyle.Fill;
-            dgvKpoTransport.Location = new Point(3, 3);
-            dgvKpoTransport.Name = "dgvKpoTransport";
-            dgvKpoTransport.Size = new Size(976, 444);
-            dgvKpoTransport.TabIndex = 0;
             // 
             // FormGlowne
             // 
@@ -407,6 +422,8 @@
             ((System.ComponentModel.ISupportInitialize)dgvKpo).EndInit();
             tabPage4.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)dgvKpoSender).EndInit();
+            tabPage5.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)dgvKpoTransport).EndInit();
             statusStrip1.ResumeLayout(false);
             statusStrip1.PerformLayout();
             menuStrip1.ResumeLayout(false);
@@ -414,8 +431,6 @@
             panel5.ResumeLayout(false);
             panel5.PerformLayout();
             panel6.ResumeLayout(false);
-            tabPage5.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)dgvKpoTransport).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -454,5 +469,6 @@
         private Panel panel6;
         private TabPage tabPage5;
         private DataGridView dgvKpoTransport;
+        private CheckBox checkBoxDatyTransportu;
     }
 }

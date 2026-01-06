@@ -1,11 +1,13 @@
-﻿using System;
+﻿using ERPI_BDO.Models;
+using ERPI_BDO.OpenApi.WasteRegister;
+using ERPI_BDO.OpenApi.WasteRegister.Models;
+using System;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Net.Http.Json;
 using System.Text.Json;
 using System.Threading.Tasks;
-using ERPI_BDO.OpenApi.WasteRegister;
-using ERPI_BDO.Models;
-using ERPI_BDO.OpenApi.WasteRegister.Models;
 
 namespace ERPI_BDO.Api
 {
@@ -117,90 +119,27 @@ namespace ERPI_BDO.Api
         // KPO DETAILS – KLUCZOWA METODA
         // =========================================================
 
-        public async Task<KpoDetailsDto?> GetKpoDetailsAsync(
-            Guid kpoId,
-            HttpClient eupClient,
-            int companyType, // 0=Sender, 1=Carrier, 2=Receiver
-            Action<string> debug)
+        public async Task<List<KpoSearchItemDto>> GetKpoListAsync(string endpoint, object criteria, string token, Action<string>? debug = null)
         {
-            debug?.Invoke($"Pobieranie detali KPO {kpoId} (CompanyType={companyType})");
+            debug?.Invoke($"[GetKpoList] START: {endpoint}");
 
-            var endpoints = new[]
+            using var client = new HttpClient { BaseAddress = new Uri("https://api.bdo.mos.gov.pl") };
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            var response = await client.PostAsJsonAsync(endpoint, criteria);
+            if (!response.IsSuccessStatusCode)
             {
-        "receiveconfirmed",
-        "transportconfirmation",
-        "approved",
-        "planned",
-        "withdrawn",
-        "confirmationgenerated",
-        "rejected",
-        "printingpage"
-    };
-
-            foreach (var endpoint in endpoints)
-            {
-                try
-                {
-                    var url =
-                        $"/api/WasteRegister/WasteTransferCard/v1/Kpo/{endpoint}/card" +
-                        $"?KpoId={kpoId}&CompanyType={companyType}";
-
-                    debug?.Invoke($"DETAILS TRY: {url}");
-
-                    var response = await eupClient.GetAsync(url);
-                    var body = await response.Content.ReadAsStringAsync();
-
-                    debug?.Invoke($"HTTP {(int)response.StatusCode}");
-                    debug?.Invoke($"BODY LENGTH = {body.Length}");
-
-                    if (!response.IsSuccessStatusCode)
-                        continue;
-
-                    using var doc = JsonDocument.Parse(body);
-                    var root = doc.RootElement;
-
-                    var details = JsonSerializer.Deserialize<KpoDetailsDto>(
-                        body,
-                        new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
-
-                    if (details == null)
-                        continue;
-
-                    // =====================================================
-                    // ✅ MAPOWANIE company {} → CARRIER (zgodne z DTO)
-                    // =====================================================
-                    if (companyType == 1 && root.TryGetProperty("company", out var company))
-                    {
-                        details.CarrierIdentificationNumber =
-                            GetString(company, "identificationNumber", "registryNumber");
-
-                        details.CarrierNip =
-                            GetString(company, "nip");
-
-                        details.CarrierEuNip =
-                            GetString(company, "euNip");
-
-                        details.CarrierRegistrationNumber =
-                            GetString(company, "registryNumber");
-
-                        debug?.Invoke(
-                            $"[CARRIER] Nip={details.CarrierNip}, Registry={details.CarrierRegistrationNumber}");
-                    }
-
-                    debug?.Invoke(
-                        $"DETAILS OK ({endpoint}) CardNumber={details.CardNumber}, WasteMass={details.WasteMass}");
-
-                    return details;
-                }
-                catch (Exception ex)
-                {
-                    debug?.Invoke($"DETAILS ERROR ({endpoint}): {ex.Message}");
-                    continue;
-                }
+                debug?.Invoke($"[GetKpoList] ERROR: {response.StatusCode}");
+                return new List<KpoSearchItemDto>();
             }
 
-            debug?.Invoke($"DETAILS NOT FOUND for KPO {kpoId}");
-            return null;
+            string rawJson = await response.Content.ReadAsStringAsync();
+            debug?.Invoke($"[RAW JSON] {rawJson}");
+
+            var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+            var result = JsonSerializer.Deserialize<KpoSearchResponseDto>(rawJson, options);
+
+            return result?.Items ?? new List<KpoSearchItemDto>();
         }
 
 
